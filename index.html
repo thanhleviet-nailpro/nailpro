@@ -22,6 +22,9 @@ body{margin:0;padding:12px;background:#09090b;color:#ffffff;display:flex;flex-di
 .tabs{display:flex;gap:8px;margin-bottom:10px;overflow-x:auto;padding-bottom:2px;flex-shrink:0}
 .tab{flex:1;background:#18181b;color:#d4d4d8;border:2px solid #52525b;padding:12px 8px;border-radius:12px;font-size:14px;font-weight:800;white-space:nowrap;text-align:center}
 .tab.on{background:#ffb703;color:#000000;border-color:#ffffff;box-shadow:0 3px 10px rgba(255,183,3,0.35)}
+/* Chia 3 Tab của Chế độ 1 vừa khít màn hình iPhone */
+#v1 .tabs{display:grid;grid-template-columns:1fr 1fr 1fr;gap:5px;margin-bottom:8px;overflow:visible}
+#v1 .tab{padding:10px 2px;font-size:12px;letter-spacing:-0.3px;overflow:hidden;text-overflow:ellipsis}
 /* Nút câu mẫu & Bảng giá cỡ đại */
 .list{display:none;flex-wrap:wrap;gap:8px;height:145px;overflow-y:auto;align-content:flex-start;flex-shrink:0;padding-right:2px}
 .list.on{display:flex}
@@ -189,58 +192,80 @@ function quotePrice(amount, el){
   say(en, vi, el);
 }
 function mic(l){
-  if(!rc)return alert("Mở bằng Safari trên iPhone!");
-  var k=(localStorage.getItem('gk')||'').replace(/\s+/g, '');
-  if(!k)return openM();
-  document.getElementById('bE').classList.remove('rec');document.getElementById('bV').classList.remove('rec');
+  var SR = window.SpeechRecognition || window.webkitSpeechRecognition;
+  if(!SR) return alert("Hãy mở bằng trình duyệt Safari trên iPhone!");
+  var k = (localStorage.getItem('gk')||'').replace(/\s+/g, '');
+  if(!k) return openM();
+
+  // Tắt loa đang đọc để trả lại quyền Micro cho iOS đời mới
+  window.speechSynthesis.cancel();
+
+  document.getElementById('bE').classList.remove('rec');
+  document.getElementById('bV').classList.remove('rec');
   document.getElementById(l=='en-US'?'bE':'bV').classList.add('rec');
-  document.getElementById('o').innerText="Đang nghe...";document.getElementById('t').innerText="...";
-  try{rc.abort()}catch(e){}
-  rc.lang=l;
-  rc.onresult=async function(e){
-    var tx=e.results.item(0).item(0).transcript;
-    document.getElementById('o').innerText=tx;
-    document.getElementById('bE').classList.remove('rec');document.getElementById('bV').classList.remove('rec');
-        var p="Dịch sang "+(l=='en-US'?'Tiếng Việt':'Tiếng Anh Mỹ tiệm nail')+" (chỉ trả về câu dịch): "+tx;
-        var domain = ["generativelanguage", "googleapis", "com"].join(".");
-    var models = ["gemini-3.5-flash-lite", "gemini-3.8-flash", "gemini-3.1-flash-lite", "gemini-flash-latest"];
-    setTimeout(async function(){
-      var success = false;
-      var lastErr = "";
-      for (var i = 0; i < models.length; i++) {
-        var apiUrl = "https://" + domain + "/v1beta/models/" + models[i] + ":generateContent?key=" + k;
-        try {
-          var r = await fetch(apiUrl, {
-            method: "POST",
-            headers: {"Content-Type": "application/json"},
-            body: JSON.stringify({contents:[{parts:[{text:p}]}]})
-          });
-          var d = await r.json();
-          if (r.ok && !d.error && d.candidates && d.candidates.length > 0) {
-            var ans = d.candidates[0].content.parts[0].text.trim();
-            document.getElementById('t').innerText = ans;
-            lt = ans;
-            ll = l == 'en-US' ? 'vi-VN' : 'en-US';
-            if (l == 'vi-VN') spk(ans, 'en-US');
-            success = true;
-            break;
-          } else {
-            lastErr = (d.error && d.error.message) ? d.error.message : ("Mã lỗi " + r.status);
-          }
-        } catch(x) {
-          lastErr = x.message;
+  document.getElementById('o').innerText = "Đang chuẩn bị mic...";
+  document.getElementById('t').innerText = "...";
+
+  // Tạo bộ thu âm mới mỗi lần bấm để tránh lỗi aborted trên iOS mới
+  setTimeout(function(){
+    var newRec = new SR();
+    newRec.lang = l;
+    newRec.continuous = false;
+    newRec.interimResults = false;
+
+    newRec.onstart = function(){
+      document.getElementById('o').innerText = "Đang nghe... Hãy nói ngay!";
+    };
+
+    newRec.onresult = async function(e){
+      var tx = e.results.item(0).item(0).transcript;
+      document.getElementById('o').innerText = tx;
+      document.getElementById('bE').classList.remove('rec');
+      document.getElementById('bV').classList.remove('rec');
+
+      var p = "Dịch sang " + (l=='en-US'?'Tiếng Việt':'Tiếng Anh Mỹ tiệm nail') + " (chỉ trả về câu dịch): " + tx;
+      var domain = ["generativelanguage", "googleapis", "com"].join(".");
+      var apiUrl = "https://" + domain + "/v1beta/models/gemini-3.8-flash:generateContent?key=" + k;
+
+      try {
+        var r = await fetch(apiUrl, {
+          method: "POST",
+          headers: {"Content-Type": "application/json"},
+          body: JSON.stringify({contents:[{parts:[{text:p}]}]})
+        });
+        var d = await r.json();
+        if(!r.ok || d.error){
+          var msg = (d.error && d.error.message) ? d.error.message : ("Mã lỗi " + r.status);
+          document.getElementById('t').innerText = "Lỗi Google: " + msg;
+          return;
         }
+        var ans = d.candidates.shift().content.parts.shift().text.trim();
+        document.getElementById('t').innerText = ans;
+        lt = ans;
+        ll = l=='en-US'?'vi-VN':'en-US';
+        if(l=='vi-VN') spk(ans, 'en-US');
+      } catch(x) {
+        document.getElementById('t').innerText = "Lỗi mạng: " + x.message;
       }
-      if (!success) {
-        document.getElementById('t').innerText = "Máy chủ đang bận (" + lastErr + "). Bấm nói lại nhé!";
+    };
+
+    newRec.onerror = function(e){
+      document.getElementById('bE').classList.remove('rec');
+      document.getElementById('bV').classList.remove('rec');
+      if(e.error === 'aborted') {
+        document.getElementById('o').innerText = "Mic bị ngắt. Hãy bấm lại 1 lần nữa nhé!";
+      } else {
+        document.getElementById('o').innerText = "Lỗi mic: " + e.error;
       }
-    }, 600);
-  };
-  rc.onerror=function(e){
-    document.getElementById('bE').classList.remove('rec');document.getElementById('bV').classList.remove('rec');
-    document.getElementById('o').innerText="Lỗi mic: "+e.error;
-  };
-  rc.start();
+    };
+
+    newRec.onend = function(){
+      document.getElementById('bE').classList.remove('rec');
+      document.getElementById('bV').classList.remove('rec');
+    };
+
+    newRec.start();
+  }, 200);
 }
 var data=[
   [
