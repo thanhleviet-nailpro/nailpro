@@ -5,41 +5,52 @@
 <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
 <title>Nail Pro 2-in-1</title>
 <style>
-*{box-sizing:border-box;font-family:-apple-system,sans-serif;-webkit-tap-highlight-color:transparent}
-body{margin:0;padding:12px;background:#121214;color:#fff;display:flex;flex-direction:column;height:100vh;overflow:hidden}
-.hd{display:flex;justify-content:space-between;align-items:center;padding-bottom:8px;border-bottom:1px solid #333}
-.mode-bar{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin:8px 0}
-.m-btn{background:#1e1e22;color:#888;border:1px solid #333;padding:10px;border-radius:12px;font-size:15px;font-weight:bold}
-.m-btn.on{background:#ff7eb3;color:#000;border-color:#ff7eb3}
+*{box-sizing:border-box;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;-webkit-tap-highlight-color:transparent}
+body{margin:0;padding:12px;background:#09090b;color:#ffffff;display:flex;flex-direction:column;height:100vh;overflow:hidden}
+.hd{display:flex;justify-content:space-between;align-items:center;padding-bottom:8px;border-bottom:2px solid #27272a}
+/* Thiết kế lại 2 Tab chính trên cùng - To rõ, viền nổi bật */
+.mode-bar{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin:10px 0;background:#18181b;padding:6px;border-radius:16px;border:2px solid #3f3f46}
+.m-btn{background:transparent;color:#a1a1aa;border:2px solid transparent;padding:13px 8px;border-radius:12px;font-size:16px;font-weight:800;letter-spacing:0.3px;transition:0.15s}
+.m-btn.on{background:#ff2d55;color:#ffffff;border-color:#ff8fa3;box-shadow:0 4px 12px rgba(255,45,85,0.4)}
 .view{display:none;flex:1;flex-direction:column;overflow:hidden}
 .view.on{display:flex}
-.box{flex:1;background:#1e1e22;border-radius:14px;padding:12px;margin-bottom:8px;display:flex;flex-direction:column;justify-content:space-between;overflow-y:auto}
-.orig{font-size:16px;color:#ccc;margin:4px 0 8px}
-.trans{font-size:22px;font-weight:bold;color:#4cd964}
-.tabs{display:flex;gap:6px;margin-bottom:8px;overflow-x:auto;padding-bottom:4px;flex-shrink:0}
-.tab{background:#1e1e22;color:#aaa;border:1px solid #333;padding:8px 11px;border-radius:10px;font-size:13px;font-weight:bold;white-space:nowrap;flex-shrink:0}
-.tab.on{background:#64d2ff;color:#000;border-color:#64d2ff}
-.list{display:none;flex-wrap:wrap;gap:6px;height:125px;overflow-y:auto;align-content:flex-start;flex-shrink:0}
+/* Khung hiển thị chữ tương phản cao */
+.box{flex:1;background:#18181b;border-radius:16px;padding:14px;margin-bottom:10px;display:flex;flex-direction:column;justify-content:space-between;overflow-y:auto;border:2px solid #3f3f46}
+.orig{font-size:17px;color:#e4e4e7;margin:4px 0 8px;line-height:1.35}
+.trans{font-size:24px;font-weight:800;color:#00f5d4;line-height:1.3}
+/* Thiết kế lại Tab 1, 2, 3 - Viền rõ, màu Vàng Hổ Phách chống chói */
+.tabs{display:flex;gap:8px;margin-bottom:10px;overflow-x:auto;padding-bottom:2px;flex-shrink:0}
+.tab{flex:1;background:#18181b;color:#d4d4d8;border:2px solid #52525b;padding:12px 8px;border-radius:12px;font-size:14px;font-weight:800;white-space:nowrap;text-align:center}
+.tab.on{background:#ffb703;color:#000000;border-color:#ffffff;box-shadow:0 3px 10px rgba(255,183,3,0.35)}
+/* Nút câu mẫu & Bảng giá cỡ đại */
+.list{display:none;flex-wrap:wrap;gap:8px;height:145px;overflow-y:auto;align-content:flex-start;flex-shrink:0;padding-right:2px}
 .list.on{display:flex}
-.chip{background:#2c2c30;color:#fff;border:1px solid #444;padding:8px 10px;border-radius:10px;font-size:13px}
-.ctrls{display:grid;grid-template-columns:1fr 1fr;gap:8px;padding:6px 0 8px;flex-shrink:0}
-.mic{border:none;border-radius:14px;padding:15px;font-size:16px;font-weight:bold;color:#fff}
-.rec{background:#ff9f0a!important;color:#000}
-.card{flex:1;background:#1e1e22;border-radius:16px;padding:14px;display:flex;flex-direction:column;justify-content:space-between;border:1px solid #2c2c30;overflow-y:auto}
-.vi-m{font-size:15px;color:#ffd60a;font-weight:600}
-.en-t{font-size:22px;font-weight:bold;color:#fff;margin:6px 0;line-height:1.25}
-.phon{font-size:16px;color:#64d2ff;background:#121214;padding:8px 10px;border-radius:10px;border-left:4px solid #64d2ff}
-.aud-r{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:10px}
-.b-aud{background:#2c2c30;color:#fff;border:1px solid #444;padding:11px;border-radius:10px;font-size:14px;font-weight:bold}
-.prac{margin-top:10px;background:#161618;padding:10px;border-radius:12px;text-align:center}
-.b-mic{width:100%;background:#0a84ff;color:#fff;border:none;padding:13px;border-radius:12px;font-size:16px;font-weight:bold}
-.b-mic.rec{background:#ff9f0a;color:#000}
-.res-t{margin-top:6px;font-size:13px;min-height:20px;color:#ccc}
+.chip{background:#27272a;color:#ffffff;border:2px solid #52525b;padding:11px 13px;border-radius:12px;font-size:14px;font-weight:700}
+.chip:active{background:#00f5d4;color:#000000;border-color:#ffffff}
+.chip.on{background:#00f5d4!important;color:#000000!important;border-color:#ffffff!important;box-shadow:0 0 12px rgba(0,245,212,0.6)}
+/* Nút Micro to rõ dễ bấm */
+.ctrls{display:grid;grid-template-columns:1fr 1fr;gap:10px;padding:8px 0 6px;flex-shrink:0}
+.mic{border:2px solid rgba(255,255,255,0.3);border-radius:16px;padding:18px 10px;font-size:17px;font-weight:800;color:#ffffff;box-shadow:0 4px 10px rgba(0,0,0,0.4)}
+.rec{background:#ff9f0a!important;color:#000000!important;border-color:#ffffff!important}
+/* Giao diện thẻ Luyện Nói */
+.card{flex:1;background:#18181b;border-radius:16px;padding:16px;display:flex;flex-direction:column;justify-content:space-between;border:2px solid #3f3f46;overflow-y:auto}
+.vi-m{font-size:16px;color:#ffb703;font-weight:700}
+.en-t{font-size:24px;font-weight:800;color:#ffffff;margin:8px 0;line-height:1.3}
+.phon{font-size:17px;color:#00f5d4;background:#09090b;padding:10px 12px;border-radius:12px;border:2px solid #27272a;border-left:5px solid #00f5d4}
+.aud-r{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:12px}
+.b-aud{background:#27272a;color:#ffffff;border:2px solid #52525b;padding:14px;border-radius:12px;font-size:15px;font-weight:800}
+.b-aud:active{background:#00f5d4;color:#000000}
+.prac{margin-top:12px;background:#09090b;padding:12px;border-radius:14px;text-align:center;border:1px solid #27272a}
+.b-mic{width:100%;background:#0a84ff;color:#ffffff;border:2px solid #60a5fa;padding:16px;border-radius:14px;font-size:17px;font-weight:800}
+.b-mic.rec{background:#ff9f0a;color:#000000;border-color:#ffffff}
+.res-t{margin-top:8px;font-size:14px;min-height:22px;color:#e4e4e7;font-weight:600}
 .nav{display:flex;gap:10px;padding:8px 0 6px;flex-shrink:0}
-.b-nav{flex:1;background:#2c2c30;color:#fff;border:none;padding:13px;border-radius:12px;font-size:15px;font-weight:bold}
-#md{display:none;position:fixed;inset:0;background:rgba(0,0,0,.85);padding:20px;justify-content:center;align-items:center;z-index:99}
-.mb{background:#1e1e22;padding:20px;border-radius:14px;width:100%;max-width:340px}
-input{width:100%;padding:10px;margin:10px 0;border-radius:8px;border:1px solid #444;background:#121214;color:#fff}
+.b-nav{flex:1;background:#27272a;color:#ffffff;border:2px solid #52525b;padding:15px;border-radius:14px;font-size:16px;font-weight:800}
+.b-nav:active{background:#ffb703;color:#000000}
+/* Cửa sổ nhập Key */
+#md{display:none;position:fixed;inset:0;background:rgba(0,0,0,.9);padding:20px;justify-content:center;align-items:center;z-index:99}
+.mb{background:#18181b;padding:22px;border-radius:16px;width:100%;max-width:350px;border:2px solid #52525b}
+input{width:100%;padding:12px;margin:10px 0;border-radius:10px;border:2px solid #52525b;background:#09090b;color:#ffffff;font-size:16px;font-weight:bold}
 </style>
 </head>
 <body>
@@ -47,13 +58,11 @@ input{width:100%;padding:10px;margin:10px 0;border-radius:8px;border:1px solid #
   <b style="color:#ff7eb3;font-size:18px">💅 Nail Pro 2-in-1</b>
   <button onclick="openM()" style="background:#333;color:#fff;border:none;padding:6px 10px;border-radius:8px;font-size:13px">⚙️ API Key</button>
 </div>
-
 <div class="mode-bar">
   <button id="m1" class="m-btn on" onclick="setMode(1)">🎙️ Dịch 2 Chiều</button>
   <button id="m2" class="m-btn" onclick="setMode(2)">🗣️ Luyện Nói 50+</button>
 </div>
-
-<!-- CHẾ ĐỘ 1: DỊCH 2 CHIỀU & CÂU MẪU -->
+<!-- CHẾ ĐỘ 1: DỊCH 2 CHIỀU & BÁO GIÁ NHANH -->
 <div id="v1" class="view on">
   <div class="box">
     <div><small style="color:#888">NỘI DUNG GỐC:</small><div id="o" class="orig">Bấm Micro hoặc chọn câu mẫu...</div></div>
@@ -61,50 +70,41 @@ input{width:100%;padding:10px;margin:10px 0;border-radius:8px;border:1px solid #
     <button onclick="reSpk()" style="align-self:flex-end;background:#333;color:#fff;border:none;padding:6px 12px;border-radius:8px">🔊 Đọc lại</button>
   </div>
   <div class="tabs">
-    <button class="tab on" onclick="tab(1,this)">1. Đón khách</button>
-    <button class="tab" onclick="tab(2,this)">2. Dũa dáng</button>
-    <button class="tab" onclick="tab(3,this)">3. Làm móng</button>
-    <button class="tab" onclick="tab(4,this)">4. Tay Chân Chuyên Sâu</button>
-    <button class="tab" onclick="tab(5,this)">5. Màu & Tiền</button>
+    <button class="tab on" onclick="tab(1,this)">1. Đón & Hỏi Kiểu</button>
+    <button class="tab" onclick="tab(2,this)">2. Làm Móng & Spa</button>
+    <button class="tab" onclick="tab(3,this)">3. 💰 Báo Giá & Tiền</button>
   </div>
   <div id="t1" class="list on">
-    <button class="chip" onclick="say('Hi, welcome in! Do you have an appointment today?','Có hẹn chưa?')">Có hẹn chưa?</button>
-    <button class="chip" onclick="say('What would you like to get done today?','Làm dịch vụ gì?')">Làm dịch vụ gì?</button>
-    <button class="chip" onclick="say('Would you like a manicure, pedicure, or a full set?','Tay, chân hay full set?')">Tay / Chân / Full set?</button>
-    <button class="chip" onclick="say('Do you want regular polish, gel, dip powder, or acrylic?','Sơn thường, gel, bột nhúng hay đắp bột?')">Loại sơn / bột?</button>
-    <button class="chip" onclick="say('Do you need a soak-off first?','Tháo móng cũ trước không?')">Tháo móng cũ?</button>
-    <button class="chip" onclick="say('Would you like acrylic, Gel-X, builder gel, or dual form?','Đắp bột, Gel-X, Builder gel hay Dual form?')">Bột / Gel-X / Builder / Dual form?</button>
-    <button class="chip" onclick="say('Do you need a full set or just a fill-in?','Làm nguyên bộ mới hay đắp chân móng (fill)?')">Full set hay Fill?</button>
+    <button class="chip" onclick="say('Hi, welcome in! What would you like to get done today?','Chào bạn! Hôm nay bạn muốn làm dịch vụ gì?',this)">Chào & Hỏi dịch vụ</button>
+    <button class="chip" onclick="say('Would you like acrylic, Gel-X, builder gel, or dip powder?','Đắp bột, Gel-X, Builder gel hay nhúng bột?',this)">Bột / Gel-X / Builder / Dip?</button>
+    <button class="chip" onclick="say('Do you need a full set or just a fill-in?','Làm bộ mới hay dặm chân móng (fill)?',this)">Full set hay Fill?</button>
+    <button class="chip" onclick="say('What shape and length would you like? Square, almond, or coffin?','Bạn muốn dũa dáng gì và dài cỡ nào?',this)">Dũa dáng & Độ dài?</button>
+    <button class="chip" onclick="say('Would you like a classic French tip or a nail design?','Vẽ French hay vẽ kiểu design?',this)">Vẽ French hay Design?</button>
+    <button class="chip" onclick="say('Do you need a soak-off first?','Có cần tháo móng cũ trước không?',this)">Tháo móng cũ?</button>
   </div>
   <div id="t2" class="list">
-    <button class="chip" onclick="say('How short would you like them?','Cắt ngắn cỡ nào?')">Cắt ngắn cỡ nào?</button>
-    <button class="chip" onclick="say('Is this length okay for you?','Độ dài này ổn chưa?')">Độ dài ổn chưa?</button>
-    <button class="chip" onclick="say('What shape would you like? Square, squoval, round, almond, or coffin?','Dũa dáng gì?')">Dũa dáng gì?</button>
-    <button class="chip" onclick="say('Please check the shape and length before I apply the color.','Kiểm tra dáng và độ dài nhé.')">Kiểm tra dáng & dài</button>
+    <button class="chip" onclick="say('Please wash your hands with warm water, no soap.','Rửa tay nước ấm, không xà phòng nhé.',this)">Rửa tay nước ấm</button>
+    <button class="chip" onclick="say('Please relax your hand and put it in the lamp for 60 seconds.','Thả lỏng tay và hơ đèn 60 giây nhé.',this)">Thả lỏng & Hơ đèn 60s</button>
+    <button class="chip" onclick="say('Does it hurt or feel too hot?','Có bị đau hay nóng quá không bạn?',this)">Đau hay nóng không?</button>
+    <button class="chip" onclick="say('Would you like callus removal and a hot stone massage?','Chà gót chân và mát-xa đá nóng không?',this)">Chà gót & Đá nóng?</button>
+    <button class="chip" onclick="say('Is the water temperature and massage pressure good for you?','Nước ấm và lực bóp vừa chưa bạn?',this)">Nước & Lực bóp vừa chưa?</button>
+    <button class="chip" onclick="say('Please check the shape and color to see if you like them.','Kiểm tra lại dáng và màu xem ưng chưa nhé.',this)">Kiểm tra dáng & màu</button>
   </div>
   <div id="t3" class="list">
-    <button class="chip" onclick="say('Please relax your hand.','Thả lỏng tay giúp mình.')">Thả lỏng tay</button>
-    <button class="chip" onclick="say('Please wash your hands with warm water, no soap.','Rửa tay nước ấm, không xà phòng.')">Rửa tay nước ấm</button>
-    <button class="chip" onclick="say('Please put your hand inside the UV lamp for 60 seconds.','Hơ đèn 60 giây nhé.')">Hơ đèn 60 giây</button>
-    <button class="chip" onclick="say('Does it hurt or feel too hot?','Có đau hay nóng không?')">Đau hay nóng không?</button>
-  </div>
-  <div id="t4" class="list">
-    <button class="chip" onclick="say('Let me know if the water temperature is comfortable for you.','Nước ấm vừa chưa bạn?')">Nước ấm vừa chưa?</button>
-    <button class="chip" onclick="say('Would you like me to trim your cuticles closely?','Cắt da kỹ không bạn?')">Cắt da kỹ không?</button>
-    <button class="chip" onclick="say('Do you have any ingrown toenails that bother you?','Có móng chân quặp đau không?')">Móng quặp đau không?</button>
-    <button class="chip" onclick="say('Would you like callus removal and a sugar scrub?','Chà gót và tẩy tế bào chết không?')">Chà gót & Tẩy da chết?</button>
-    <button class="chip" onclick="say('Would you like a hot stone massage or paraffin wax?','Mát-xa đá nóng hay đắp sáp nến?')">Đá nóng / Sáp nến?</button>
-    <button class="chip" onclick="say('Is the massage pressure good for you?','Lực bóp mát-xa vừa chưa?')">Lực mát-xa vừa chưa?</button>
-  </div>
-  <div id="t5" class="list">
-    <button class="chip" onclick="say('Do you have a picture of the design you want?','Có ảnh mẫu vẽ không?')">Có ảnh mẫu không?</button>
-    <button class="chip" onclick="say('Would you like a classic French tip or a colored French?','Vẽ đầu móng French trắng hay French màu?')">Vẽ French trắng hay màu?</button>
-    <button class="chip" onclick="say('How deep would you like the French smile line?','Đường cười French sâu hay mảnh?')">French sâu hay mảnh?</button>
-    <button class="chip" onclick="say('Would you like nail art on all fingers or just accent nails?','Vẽ kiểu hết các ngón hay chỉ vẽ ngón điểm nhấn?')">Vẽ hết hay vẽ ngón nhấn?</button>
-    <button class="chip" onclick="say('Would you like a shiny top coat or a matte top coat?','Sơn bóng hay sơn lì?')">Sơn bóng hay lì?</button>
-    <button class="chip" onclick="say('Please wait about 5 minutes for the regular polish to dry.','Đợi 5 phút cho sơn khô nhé.')">Đợi 5 phút khô sơn</button>
-    <button class="chip" onclick="say('How would you like to pay? Cash or card?','Tiền mặt hay thẻ?')">Tiền mặt hay thẻ?</button>
-    <button class="chip" onclick="say('Thank you so much! Have a wonderful day!','Cảm ơn bạn nhiều!')">Cảm ơn & Chào khách</button>
+    <div style="display:flex;gap:6px;width:100%;margin-bottom:4px">
+      <input type="number" id="customPrice" placeholder="Nhập số tiền ($)" style="margin:0;padding:8px;font-size:15px;flex:1">
+      <button onclick="quotePrice(document.getElementById('customPrice').value)" style="background:#30d158;color:#000;border:none;border-radius:8px;padding:0 14px;font-weight:bold;font-size:14px">🔊 Báo giá</button>
+    </div>
+    <button class="chip" onclick="quotePrice(35,this)">$35</button>
+    <button class="chip" onclick="quotePrice(45,this)">$45</button>
+    <button class="chip" onclick="quotePrice(55,this)">$55</button>
+    <button class="chip" onclick="quotePrice(65,this)">$65</button>
+    <button class="chip" onclick="quotePrice(75,this)">$75</button>
+    <button class="chip" onclick="quotePrice(85,this)">$85</button>
+    <button class="chip" onclick="quotePrice(95,this)">$95</button>
+    <button class="chip" onclick="quotePrice(110,this)">$110</button>
+    <button class="chip" onclick="say('How would you like to pay? Cash or card?','Thanh toán tiền mặt hay thẻ?',this)">Tiền mặt hay thẻ?</button>
+    <button class="chip" onclick="say('Thank you so much! Have a wonderful day!','Cảm ơn bạn nhiều! Chúc một ngày tốt lành!',this)">Cảm ơn khách</button>
   </div>
   <div class="ctrls">
     <button id="bE" class="mic" style="background:#0a84ff" onclick="mic('en-US')">🇺🇸 Khách nói (EN)</button>
@@ -171,11 +171,23 @@ function saveM(){
   document.getElementById('md').style.display='none';
   alert("Đã lưu Key sạch sẽ!");
 }
-
 function spk(x,l){window.speechSynthesis.cancel();var u=new SpeechSynthesisUtterance(x);u.lang=l;u.rate=.95;window.speechSynthesis.speak(u)}
 function reSpk(){if(lt)spk(lt,ll)}
-function say(e,v){document.getElementById('o').innerText=v;document.getElementById('t').innerText=e;lt=e;ll='en-US';spk(e,'en-US')}
-
+function say(e, v, el){
+  document.getElementById('o').innerText = v;
+  document.getElementById('t').innerText = e;
+  lt = e;
+  ll = 'en-US';
+  spk(e, 'en-US');
+  document.querySelectorAll('.chip').forEach(function(c){ c.classList.remove('on'); });
+  if (el) el.classList.add('on');
+}
+function quotePrice(amount, el){
+  if(!amount) return;
+  var en = "Your total today is $" + amount + ". How would you like to pay? Cash or card?";
+  var vi = "Tổng của bạn hôm nay là $" + amount + ". Bạn thanh toán tiền mặt hay thẻ?";
+  say(en, vi, el);
+}
 function mic(l){
   if(!rc)return alert("Mở bằng Safari trên iPhone!");
   var k=(localStorage.getItem('gk')||'').replace(/\s+/g, '');
