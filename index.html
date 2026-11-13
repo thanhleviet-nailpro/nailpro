@@ -191,8 +191,7 @@ function mic(l){
     document.getElementById('bE').classList.remove('rec');document.getElementById('bV').classList.remove('rec');
         var p="Dịch sang "+(l=='en-US'?'Tiếng Việt':'Tiếng Anh Mỹ tiệm nail')+" (chỉ trả về câu dịch): "+tx;
     var domain = ["generativelanguage", "googleapis", "com"].join(".");
-    var apiUrl = "https://" + domain + "/v1beta/models/gemini-2.5-flash:generateContent?key=" + k;
-    
+    var apiUrl = "https://" + domain + "/v1beta/models/gemini-3.8-flash:generateContent?key=" + k;
     setTimeout(async function(){
       try{
         var r = await fetch(apiUrl, {
