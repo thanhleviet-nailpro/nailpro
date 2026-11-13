@@ -190,28 +190,37 @@ function mic(l){
     document.getElementById('o').innerText=tx;
     document.getElementById('bE').classList.remove('rec');document.getElementById('bV').classList.remove('rec');
         var p="Dịch sang "+(l=='en-US'?'Tiếng Việt':'Tiếng Anh Mỹ tiệm nail')+" (chỉ trả về câu dịch): "+tx;
-    var domain = ["generativelanguage", "googleapis", "com"].join(".");
-    var apiUrl = "https://" + domain + "/v1beta/models/gemini-3.8-flash:generateContent?key=" + k;
+        var domain = ["generativelanguage", "googleapis", "com"].join(".");
+    var models = ["gemini-3.8-flash", "gemini-flash-latest", "gemini-3.8-flash-lite"];
     setTimeout(async function(){
-      try{
-        var r = await fetch(apiUrl, {
-          method: "POST",
-          headers: {"Content-Type": "application/json"},
-          body: JSON.stringify({contents:[{parts:[{text:p}]}]})
-        });
-        var d = await r.json();
-        if(!r.ok || d.error){
-          var msg = (d.error && d.error.message) ? d.error.message : ("Mã lỗi " + r.status);
-          document.getElementById('t').innerText = "Lỗi Google: " + msg;
-          return;
+      var success = false;
+      var lastErr = "";
+      for (var i = 0; i < models.length; i++) {
+        var apiUrl = "https://" + domain + "/v1beta/models/" + models[i] + ":generateContent?key=" + k;
+        try {
+          var r = await fetch(apiUrl, {
+            method: "POST",
+            headers: {"Content-Type": "application/json"},
+            body: JSON.stringify({contents:[{parts:[{text:p}]}]})
+          });
+          var d = await r.json();
+          if (r.ok && !d.error && d.candidates && d.candidates.length > 0) {
+            var ans = d.candidates[0].content.parts[0].text.trim();
+            document.getElementById('t').innerText = ans;
+            lt = ans;
+            ll = l == 'en-US' ? 'vi-VN' : 'en-US';
+            if (l == 'vi-VN') spk(ans, 'en-US');
+            success = true;
+            break;
+          } else {
+            lastErr = (d.error && d.error.message) ? d.error.message : ("Mã lỗi " + r.status);
+          }
+        } catch(x) {
+          lastErr = x.message;
         }
-        var ans = d.candidates.shift().content.parts.shift().text.trim();
-        document.getElementById('t').innerText = ans;
-        lt = ans;
-        ll = l=='en-US'?'vi-VN':'en-US';
-        if(l=='vi-VN') spk(ans,'en-US');
-      } catch(x) {
-        document.getElementById('t').innerText = "Lỗi mạng (" + x.message + "). Hãy tắt Wi-Fi dùng thử 4G!";
+      }
+      if (!success) {
+        document.getElementById('t').innerText = "Máy chủ đang bận (" + lastErr + "). Bấm nói lại nhé!";
       }
     }, 600);
   };
