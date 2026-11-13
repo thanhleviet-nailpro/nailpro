@@ -196,76 +196,59 @@ function mic(l){
   if(!SR) return alert("Hãy mở bằng trình duyệt Safari trên iPhone!");
   var k = (localStorage.getItem('gk')||'').replace(/\s+/g, '');
   if(!k) return openM();
-
-  // Tắt loa đang đọc để trả lại quyền Micro cho iOS đời mới
   window.speechSynthesis.cancel();
-
   document.getElementById('bE').classList.remove('rec');
   document.getElementById('bV').classList.remove('rec');
   document.getElementById(l=='en-US'?'bE':'bV').classList.add('rec');
-  document.getElementById('o').innerText = "Đang chuẩn bị mic...";
+  document.getElementById('o').innerText = "Đang nghe... Hãy nói ngay!";
   document.getElementById('t').innerText = "...";
-
-  // Tạo bộ thu âm mới mỗi lần bấm để tránh lỗi aborted trên iOS mới
-  setTimeout(function(){
-    var newRec = new SR();
-    newRec.lang = l;
-    newRec.continuous = false;
-    newRec.interimResults = false;
-
-    newRec.onstart = function(){
-      document.getElementById('o').innerText = "Đang nghe... Hãy nói ngay!";
-    };
-
-    newRec.onresult = async function(e){
-      var tx = e.results.item(0).item(0).transcript;
-      document.getElementById('o').innerText = tx;
-      document.getElementById('bE').classList.remove('rec');
-      document.getElementById('bV').classList.remove('rec');
-
-      var p = "Dịch sang " + (l=='en-US'?'Tiếng Việt':'Tiếng Anh Mỹ tiệm nail') + " (chỉ trả về câu dịch): " + tx;
-      var domain = ["generativelanguage", "googleapis", "com"].join(".");
-      var apiUrl = "https://" + domain + "/v1beta/models/gemini-3.8-flash:generateContent?key=" + k;
-
-      try {
-        var r = await fetch(apiUrl, {
-          method: "POST",
-          headers: {"Content-Type": "application/json"},
-          body: JSON.stringify({contents:[{parts:[{text:p}]}]})
-        });
-        var d = await r.json();
-        if(!r.ok || d.error){
-          var msg = (d.error && d.error.message) ? d.error.message : ("Mã lỗi " + r.status);
-          document.getElementById('t').innerText = "Lỗi Google: " + msg;
-          return;
-        }
-        var ans = d.candidates.shift().content.parts.shift().text.trim();
-        document.getElementById('t').innerText = ans;
-        lt = ans;
-        ll = l=='en-US'?'vi-VN':'en-US';
-        if(l=='vi-VN') spk(ans, 'en-US');
-      } catch(x) {
-        document.getElementById('t').innerText = "Lỗi mạng: " + x.message;
+  var newRec = new SR();
+  newRec.lang = l;
+  newRec.continuous = false;
+  newRec.interimResults = false;
+  newRec.onresult = async function(e){
+    var tx = e.results.item(0).item(0).transcript;
+    document.getElementById('o').innerText = tx;
+    document.getElementById('bE').classList.remove('rec');
+    document.getElementById('bV').classList.remove('rec');
+    var p = "Dịch sang " + (l=='en-US'?'Tiếng Việt':'Tiếng Anh Mỹ tiệm nail') + " (chỉ trả về câu dịch): " + tx;
+    var domain = ["generativelanguage", "googleapis", "com"].join(".");
+    var apiUrl = "https://" + domain + "/v1beta/models/gemini-3.8-flash:generateContent?key=" + k;
+    try {
+      var r = await fetch(apiUrl, {
+        method: "POST",
+        headers: {"Content-Type": "application/json"},
+        body: JSON.stringify({contents:[{parts:[{text:p}]}]})
+      });
+      var d = await r.json();
+      if(!r.ok || d.error){
+        var msg = (d.error && d.error.message) ? d.error.message : ("Mã lỗi " + r.status);
+        document.getElementById('t').innerText = "Lỗi Google: " + msg;
+        return;
       }
-    };
-
-    newRec.onerror = function(e){
-      document.getElementById('bE').classList.remove('rec');
-      document.getElementById('bV').classList.remove('rec');
-      if(e.error === 'aborted') {
-        document.getElementById('o').innerText = "Mic bị ngắt. Hãy bấm lại 1 lần nữa nhé!";
-      } else {
-        document.getElementById('o').innerText = "Lỗi mic: " + e.error;
-      }
-    };
-
-    newRec.onend = function(){
-      document.getElementById('bE').classList.remove('rec');
-      document.getElementById('bV').classList.remove('rec');
-    };
-
-    newRec.start();
-  }, 200);
+      var ans = d.candidates.shift().content.parts.shift().text.trim();
+      document.getElementById('t').innerText = ans;
+      lt = ans;
+      ll = l=='en-US'?'vi-VN':'en-US';
+      if(l=='vi-VN') spk(ans, 'en-US');
+    } catch(x) {
+      document.getElementById('t').innerText = "Lỗi mạng: " + x.message;
+    }
+  };
+  newRec.onerror = function(e){
+    document.getElementById('bE').classList.remove('rec');
+    document.getElementById('bV').classList.remove('rec');
+    if(e.error === 'aborted') {
+      document.getElementById('o').innerText = "Lỗi ngắt mic: Hãy vào Cài đặt iPhone -> Bàn phím -> Bật Đọc chính tả!";
+    } else {
+      document.getElementById('o').innerText = "Lỗi mic: " + e.error;
+    }
+  };
+  newRec.onend = function(){
+    document.getElementById('bE').classList.remove('rec');
+    document.getElementById('bV').classList.remove('rec');
+  };
+  newRec.start();
 }
 var data=[
   [
