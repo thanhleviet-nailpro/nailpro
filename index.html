@@ -1,0 +1,331 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<title>Nail Pro 2-in-1</title>
+<style>
+*{box-sizing:border-box;font-family:-apple-system,sans-serif;-webkit-tap-highlight-color:transparent}
+body{margin:0;padding:12px;background:#121214;color:#fff;display:flex;flex-direction:column;height:100vh;overflow:hidden}
+.hd{display:flex;justify-content:space-between;align-items:center;padding-bottom:8px;border-bottom:1px solid #333}
+.mode-bar{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin:8px 0}
+.m-btn{background:#1e1e22;color:#888;border:1px solid #333;padding:10px;border-radius:12px;font-size:15px;font-weight:bold}
+.m-btn.on{background:#ff7eb3;color:#000;border-color:#ff7eb3}
+.view{display:none;flex:1;flex-direction:column;overflow:hidden}
+.view.on{display:flex}
+.box{flex:1;background:#1e1e22;border-radius:14px;padding:12px;margin-bottom:8px;display:flex;flex-direction:column;justify-content:space-between;overflow-y:auto}
+.orig{font-size:16px;color:#ccc;margin:4px 0 8px}
+.trans{font-size:22px;font-weight:bold;color:#4cd964}
+.tabs{display:flex;gap:6px;margin-bottom:8px;overflow-x:auto;padding-bottom:4px;flex-shrink:0}
+.tab{background:#1e1e22;color:#aaa;border:1px solid #333;padding:8px 11px;border-radius:10px;font-size:13px;font-weight:bold;white-space:nowrap;flex-shrink:0}
+.tab.on{background:#64d2ff;color:#000;border-color:#64d2ff}
+.list{display:none;flex-wrap:wrap;gap:6px;height:125px;overflow-y:auto;align-content:flex-start;flex-shrink:0}
+.list.on{display:flex}
+.chip{background:#2c2c30;color:#fff;border:1px solid #444;padding:8px 10px;border-radius:10px;font-size:13px}
+.ctrls{display:grid;grid-template-columns:1fr 1fr;gap:8px;padding:6px 0 8px;flex-shrink:0}
+.mic{border:none;border-radius:14px;padding:15px;font-size:16px;font-weight:bold;color:#fff}
+.rec{background:#ff9f0a!important;color:#000}
+.card{flex:1;background:#1e1e22;border-radius:16px;padding:14px;display:flex;flex-direction:column;justify-content:space-between;border:1px solid #2c2c30;overflow-y:auto}
+.vi-m{font-size:15px;color:#ffd60a;font-weight:600}
+.en-t{font-size:22px;font-weight:bold;color:#fff;margin:6px 0;line-height:1.25}
+.phon{font-size:16px;color:#64d2ff;background:#121214;padding:8px 10px;border-radius:10px;border-left:4px solid #64d2ff}
+.aud-r{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:10px}
+.b-aud{background:#2c2c30;color:#fff;border:1px solid #444;padding:11px;border-radius:10px;font-size:14px;font-weight:bold}
+.prac{margin-top:10px;background:#161618;padding:10px;border-radius:12px;text-align:center}
+.b-mic{width:100%;background:#0a84ff;color:#fff;border:none;padding:13px;border-radius:12px;font-size:16px;font-weight:bold}
+.b-mic.rec{background:#ff9f0a;color:#000}
+.res-t{margin-top:6px;font-size:13px;min-height:20px;color:#ccc}
+.nav{display:flex;gap:10px;padding:8px 0 6px;flex-shrink:0}
+.b-nav{flex:1;background:#2c2c30;color:#fff;border:none;padding:13px;border-radius:12px;font-size:15px;font-weight:bold}
+#md{display:none;position:fixed;inset:0;background:rgba(0,0,0,.85);padding:20px;justify-content:center;align-items:center;z-index:99}
+.mb{background:#1e1e22;padding:20px;border-radius:14px;width:100%;max-width:340px}
+input{width:100%;padding:10px;margin:10px 0;border-radius:8px;border:1px solid #444;background:#121214;color:#fff}
+</style>
+</head>
+<body>
+<div class="hd">
+  <b style="color:#ff7eb3;font-size:18px">💅 Nail Pro 2-in-1</b>
+  <button onclick="openM()" style="background:#333;color:#fff;border:none;padding:6px 10px;border-radius:8px;font-size:13px">⚙️ API Key</button>
+</div>
+
+<div class="mode-bar">
+  <button id="m1" class="m-btn on" onclick="setMode(1)">🎙️ Dịch 2 Chiều</button>
+  <button id="m2" class="m-btn" onclick="setMode(2)">🗣️ Luyện Nói 50+</button>
+</div>
+
+<!-- CHẾ ĐỘ 1: DỊCH 2 CHIỀU & CÂU MẪU -->
+<div id="v1" class="view on">
+  <div class="box">
+    <div><small style="color:#888">NỘI DUNG GỐC:</small><div id="o" class="orig">Bấm Micro hoặc chọn câu mẫu...</div></div>
+    <div><small style="color:#888">BẢN DỊCH / TIẾNG ANH:</small><div id="t" class="trans">...</div></div>
+    <button onclick="reSpk()" style="align-self:flex-end;background:#333;color:#fff;border:none;padding:6px 12px;border-radius:8px">🔊 Đọc lại</button>
+  </div>
+  <div class="tabs">
+    <button class="tab on" onclick="tab(1,this)">1. Đón khách</button>
+    <button class="tab" onclick="tab(2,this)">2. Dũa dáng</button>
+    <button class="tab" onclick="tab(3,this)">3. Làm móng</button>
+    <button class="tab" onclick="tab(4,this)">4. Tay Chân Chuyên Sâu</button>
+    <button class="tab" onclick="tab(5,this)">5. Màu & Tiền</button>
+  </div>
+  <div id="t1" class="list on">
+    <button class="chip" onclick="say('Hi, welcome in! Do you have an appointment today?','Có hẹn chưa?')">Có hẹn chưa?</button>
+    <button class="chip" onclick="say('What would you like to get done today?','Làm dịch vụ gì?')">Làm dịch vụ gì?</button>
+    <button class="chip" onclick="say('Would you like a manicure, pedicure, or a full set?','Tay, chân hay full set?')">Tay / Chân / Full set?</button>
+    <button class="chip" onclick="say('Do you want regular polish, gel, dip powder, or acrylic?','Sơn thường, gel, bột nhúng hay đắp bột?')">Loại sơn / bột?</button>
+    <button class="chip" onclick="say('Do you need a soak-off first?','Tháo móng cũ trước không?')">Tháo móng cũ?</button>
+    <button class="chip" onclick="say('Would you like acrylic, Gel-X, builder gel, or dual form?','Đắp bột, Gel-X, Builder gel hay Dual form?')">Bột / Gel-X / Builder / Dual form?</button>
+    <button class="chip" onclick="say('Do you need a full set or just a fill-in?','Làm nguyên bộ mới hay đắp chân móng (fill)?')">Full set hay Fill?</button>
+  </div>
+  <div id="t2" class="list">
+    <button class="chip" onclick="say('How short would you like them?','Cắt ngắn cỡ nào?')">Cắt ngắn cỡ nào?</button>
+    <button class="chip" onclick="say('Is this length okay for you?','Độ dài này ổn chưa?')">Độ dài ổn chưa?</button>
+    <button class="chip" onclick="say('What shape would you like? Square, squoval, round, almond, or coffin?','Dũa dáng gì?')">Dũa dáng gì?</button>
+    <button class="chip" onclick="say('Please check the shape and length before I apply the color.','Kiểm tra dáng và độ dài nhé.')">Kiểm tra dáng & dài</button>
+  </div>
+  <div id="t3" class="list">
+    <button class="chip" onclick="say('Please relax your hand.','Thả lỏng tay giúp mình.')">Thả lỏng tay</button>
+    <button class="chip" onclick="say('Please wash your hands with warm water, no soap.','Rửa tay nước ấm, không xà phòng.')">Rửa tay nước ấm</button>
+    <button class="chip" onclick="say('Please put your hand inside the UV lamp for 60 seconds.','Hơ đèn 60 giây nhé.')">Hơ đèn 60 giây</button>
+    <button class="chip" onclick="say('Does it hurt or feel too hot?','Có đau hay nóng không?')">Đau hay nóng không?</button>
+  </div>
+  <div id="t4" class="list">
+    <button class="chip" onclick="say('Let me know if the water temperature is comfortable for you.','Nước ấm vừa chưa bạn?')">Nước ấm vừa chưa?</button>
+    <button class="chip" onclick="say('Would you like me to trim your cuticles closely?','Cắt da kỹ không bạn?')">Cắt da kỹ không?</button>
+    <button class="chip" onclick="say('Do you have any ingrown toenails that bother you?','Có móng chân quặp đau không?')">Móng quặp đau không?</button>
+    <button class="chip" onclick="say('Would you like callus removal and a sugar scrub?','Chà gót và tẩy tế bào chết không?')">Chà gót & Tẩy da chết?</button>
+    <button class="chip" onclick="say('Would you like a hot stone massage or paraffin wax?','Mát-xa đá nóng hay đắp sáp nến?')">Đá nóng / Sáp nến?</button>
+    <button class="chip" onclick="say('Is the massage pressure good for you?','Lực bóp mát-xa vừa chưa?')">Lực mát-xa vừa chưa?</button>
+  </div>
+  <div id="t5" class="list">
+    <button class="chip" onclick="say('Do you have a picture of the design you want?','Có ảnh mẫu vẽ không?')">Có ảnh mẫu không?</button>
+    <button class="chip" onclick="say('Would you like a classic French tip or a colored French?','Vẽ đầu móng French trắng hay French màu?')">Vẽ French trắng hay màu?</button>
+    <button class="chip" onclick="say('How deep would you like the French smile line?','Đường cười French sâu hay mảnh?')">French sâu hay mảnh?</button>
+    <button class="chip" onclick="say('Would you like nail art on all fingers or just accent nails?','Vẽ kiểu hết các ngón hay chỉ vẽ ngón điểm nhấn?')">Vẽ hết hay vẽ ngón nhấn?</button>
+    <button class="chip" onclick="say('Would you like a shiny top coat or a matte top coat?','Sơn bóng hay sơn lì?')">Sơn bóng hay lì?</button>
+    <button class="chip" onclick="say('Please wait about 5 minutes for the regular polish to dry.','Đợi 5 phút cho sơn khô nhé.')">Đợi 5 phút khô sơn</button>
+    <button class="chip" onclick="say('How would you like to pay? Cash or card?','Tiền mặt hay thẻ?')">Tiền mặt hay thẻ?</button>
+    <button class="chip" onclick="say('Thank you so much! Have a wonderful day!','Cảm ơn bạn nhiều!')">Cảm ơn & Chào khách</button>
+  </div>
+  <div class="ctrls">
+    <button id="bE" class="mic" style="background:#0a84ff" onclick="mic('en-US')">🇺🇸 Khách nói (EN)</button>
+    <button id="bV" class="mic" style="background:#ff375f" onclick="mic('vi-VN')">🇻🇳 Thợ nói (VI)</button>
+  </div>
+</div>
+<!-- CHẾ ĐỘ 2: LUYỆN NÓI 50+ (8 CHỦ ĐỀ) -->
+<div id="v2" class="view">
+  <div class="tabs">
+    <button class="tab on" onclick="setCat(0,this)">1. Chào & Hỏi</button>
+    <button class="tab" onclick="setCat(1,this)">2. Làm Móng</button>
+    <button class="tab" onclick="setCat(2,this)">3. Tay Chân Chuyên Sâu</button>
+    <button class="tab" onclick="setCat(3,this)">4. Xã Giao Vui</button>
+    <button class="tab" onclick="setCat(4,this)">5. Tính Tiền</button>
+    <button class="tab" onclick="setCat(5,this)">6. Mời Thêm DV</button>
+    <button class="tab" onclick="setCat(6,this)">7. Gia Đình</button>
+    <button class="tab" onclick="setCat(7,this)">8. Xử Lý Phàn Nàn</button>
+    <button class="tab" onclick="setCat(8,this)">9. Kỹ Thuật & Mẫu Vẽ</button>
+  </div>
+  <div class="card">
+    <div>
+      <div style="display:flex;justify-content:space-between;align-items:center">
+        <span id="viMean" class="vi-m">...</span>
+        <span id="cnt" style="font-size:12px;color:#888">1/5</span>
+      </div>
+      <div id="enTxt" class="en-t">...</div>
+      <div class="phon">Mẹo đọc: <b id="phonTxt">...</b></div>
+      <div class="aud-r">
+        <button class="b-aud" onclick="playV(0.95)">🔊 Nghe chuẩn</button>
+        <button class="b-aud" onclick="playV(0.6)">🐢 Nghe chậm</button>
+      </div>
+    </div>
+    <div class="prac">
+      <button id="micBtn" class="b-mic" onclick="chkSpk()">🎤 Bấm để đọc thử</button>
+      <div id="resTxt" class="res-t">Bấm nút xanh và đọc to câu tiếng Anh ở trên</div>
+    </div>
+  </div>
+  <div class="nav">
+    <button class="b-nav" onclick="move(-1)">⬅️ Câu trước</button>
+    <button class="b-nav" onclick="move(1)">Câu tiếp ➡️</button>
+  </div>
+</div>
+
+<div id="md"><div class="mb"><b>Nhập Gemini API Key</b><input type="password" id="ki" placeholder="AIzaSy..."><button onclick="saveM()" style="width:100%;padding:10px;background:#30d158;border:none;border-radius:8px;font-weight:bold">Lưu lại</button></div></div>
+
+<script>
+var lt="",ll="en-US",SR=window.SpeechRecognition||window.webkitSpeechRecognition,rc=SR?new SR():null;
+function setMode(m){
+  document.getElementById('m1').classList.toggle('on',m===1);
+  document.getElementById('m2').classList.toggle('on',m===2);
+  document.getElementById('v1').classList.toggle('on',m===1);
+  document.getElementById('v2').classList.toggle('on',m===2);
+}
+function tab(n,e){
+  document.querySelectorAll('#v1 .list').forEach(x=>x.classList.remove('on'));
+  document.querySelectorAll('#v1 .tab').forEach(x=>x.classList.remove('on'));
+  document.getElementById('t'+n).classList.add('on');e.classList.add('on');
+}
+function openM(){document.getElementById('ki').value=localStorage.getItem('gk')||'';document.getElementById('md').style.display='flex'}
+function saveM(){
+  var cleanKey = document.getElementById('ki').value.replace(/\s+/g, '');
+  localStorage.setItem('gk', cleanKey);
+  document.getElementById('md').style.display='none';
+  alert("Đã lưu Key sạch sẽ!");
+}
+
+function spk(x,l){window.speechSynthesis.cancel();var u=new SpeechSynthesisUtterance(x);u.lang=l;u.rate=.95;window.speechSynthesis.speak(u)}
+function reSpk(){if(lt)spk(lt,ll)}
+function say(e,v){document.getElementById('o').innerText=v;document.getElementById('t').innerText=e;lt=e;ll='en-US';spk(e,'en-US')}
+
+function mic(l){
+  if(!rc)return alert("Mở bằng Safari trên iPhone!");
+  var k=(localStorage.getItem('gk')||'').replace(/\s+/g, '');
+  if(!k)return openM();
+  document.getElementById('bE').classList.remove('rec');document.getElementById('bV').classList.remove('rec');
+  document.getElementById(l=='en-US'?'bE':'bV').classList.add('rec');
+  document.getElementById('o').innerText="Đang nghe...";document.getElementById('t').innerText="...";
+  try{rc.abort()}catch(e){}
+  rc.lang=l;
+  rc.onresult=async function(e){
+    var tx=e.results.item(0).item(0).transcript;
+    document.getElementById('o').innerText=tx;
+    document.getElementById('bE').classList.remove('rec');document.getElementById('bV').classList.remove('rec');
+    var p="Dịch sang "+(l=='en-US'?'Tiếng Việt':'Tiếng Anh Mỹ tiệm nail')+" (chỉ trả về câu dịch): "+tx;
+    try{
+      var apiUrl = "https://generativelanguage" + "://" + k;
+var r = await fetch(apiUrl, {
+        method:"POST",
+        headers:{"Content-Type":"application/json"},
+        body:JSON.stringify({contents:[{parts:[{text:p}]}]})
+      });
+      var d=await r.json();
+      if(!r.ok || d.error){
+        var msg = (d.error && d.error.message) ? d.error.message : ("Mã lỗi HTTP " + r.status);
+        document.getElementById('t').innerText="Chi tiết lỗi: " + msg;
+        return;
+      }
+      var ans=d.candidates[0].content.parts[0].text.trim();
+      document.getElementById('t').innerText=ans;lt=ans;ll=l=='en-US'?'vi-VN':'en-US';
+      if(l=='vi-VN')spk(ans,'en-US');
+    }catch(x){
+      document.getElementById('t').innerText="Lỗi kết nối: " + x.message;
+    }
+  };
+  rc.onerror=function(e){
+    document.getElementById('bE').classList.remove('rec');document.getElementById('bV').classList.remove('rec');
+    document.getElementById('o').innerText="Lỗi mic: "+e.error;
+  };
+  rc.start();
+}
+var data=[
+  [
+    {vi:"Chào bạn! Hôm nay bạn khỏe không?",en:"Hi! How are you doing today?",ph:"Hai! Hao a diu đu-ing tu-đây?"},
+    {vi:"Hôm nay bạn có hẹn trước chưa?",en:"Do you have an appointment today?",ph:"Đu diu hép ân ơ-poi-mần tu-đây?"},
+    {vi:"Hôm nay bạn muốn làm dịch vụ gì?",en:"What would you like to get done today?",ph:"Quắt quút diu lai tu ghét đăn tu-đây?"},
+    {vi:"Bạn muốn sơn gel hay sơn thường?",en:"Would you like gel polish or regular polish?",ph:"Quút diu lai gieo po-lít o re-giu-lờ po-lít?"},
+    {vi:"Mời bạn đi rửa tay với nước ấm nhé.",en:"Please wash your hands with warm water.",ph:"Pờ-li quát-sờ gio hen quít quom qua-tờ."}
+  ],
+  [
+    {vi:"Bạn muốn cắt ngắn cỡ nào?",en:"How short would you like them?",ph:"Hao sót quút diu lai đem?"},
+    {vi:"Bạn muốn dũa dáng vuông, tròn hay hạnh nhân?",en:"What shape would you like? Square, round, or almond?",ph:"Quắt sếp quút diu lai? Sờ-que, rao, o a-mần?"},
+    {vi:"Độ dài này ổn với bạn chưa?",en:"Is this length okay for you?",ph:"I đít len ô-kê pho diu?"},
+    {vi:"Có bị đau hay nóng quá không bạn?",en:"Does it hurt or feel too hot?",ph:"Đơ ít hớt o phiu tu hót?"},
+    {vi:"Bạn cho tay vào đèn hơ 60 giây nhé.",en:"Please put your hand in the lamp for 60 seconds.",ph:"Pờ-li pút gio hen in đờ lem pho xích-xờ-ti xe-cần."}
+  ],
+  [
+    {vi:"Nhiệt độ nước ngâm chân đã vừa với bạn chưa?",en:"Let me know if the water temperature is comfortable for you.",ph:"Lét mi nô íp đờ qua-tờ tem-pờ-rơ-chờ i căm-phơ-tơ-bồ pho diu."},
+    {vi:"Bạn có muốn mình cắt da kỹ không?",en:"Would you like me to trim your cuticles closely?",ph:"Quút diu lai mi tu trim gio kiu-ti-cồ cờ-lâu-li?"},
+    {vi:"Bạn có móng chân quặp nào bị đau không?",en:"Do you have any ingrown toenails that bother you?",ph:"Đu diu hép e-ni in-gờ-râu thâu-neo đát bo-đờ diu?"},
+    {vi:"Bạn có muốn chà gót và tẩy tế bào chết bằng đường không?",en:"Would you like callus removal and a sugar scrub?",ph:"Quút diu lai ca-lớt ri-mu-vồ en ơ su-gờ sờ-cờ-rắp?"},
+    {vi:"Bạn có muốn mát-xa đá nóng hay ủ sáp nến ấm không?",en:"Would you like a hot stone massage or paraffin wax?",ph:"Quút diu lai ơ hót xờ-tôn mát-xa o pa-ra-phin quắc-xờ?"},
+    {vi:"Lực bóp mát-xa như vậy đã vừa với bạn chưa?",en:"Is the massage pressure good for you?",ph:"I đờ mát-xa pờ-rét-sờ gút pho diu?"}
+  ],
+  [
+    {vi:"Màu này hợp với da của bạn lắm!",en:"This color looks so good on your skin!",ph:"Đít ca-lờ lúc xô gút on gio sờ-kin!"},
+    {vi:"Cuối tuần vừa rồi của bạn thế nào?",en:"How was your weekend?",ph:"Hao quơ gio quých-ken?"},
+    {vi:"Hôm nay thời tiết bên ngoài đẹp quá nhỉ!",en:"The weather is so nice outside today!",ph:"Đờ que-đờ i xô nai ao-xai tu-đây!"},
+    {vi:"Tóc của bạn hôm nay đẹp quá!",en:"I love your hair today! It looks great!",ph:"Ai lớp gio he tu-đây! Ít lúc gờ-rết!"},
+    {vi:"Bạn có kế hoạch gì cho kỳ nghỉ lễ chưa?",en:"Do you have any plans for the holidays?",ph:"Đu diu hép e-ni pờ-len pho đờ ho-li-đây?"}
+  ],
+  [
+    {vi:"Bạn kiểm tra lại móng xem ưng ý chưa nhé.",en:"Please check your nails to see if you like them.",ph:"Pờ-li chéc gio neo tu xi íp diu lai đem."},
+    {vi:"Bạn muốn thanh toán tiền mặt hay thẻ?",en:"Would you like to pay with cash or card?",ph:"Quút diu lai tu pây quít két o cạc?"},
+    {vi:"Cảm ơn bạn rất nhiều vì tiền tip nhé!",en:"Thank you so much for the tip!",ph:"Thanh diu xô mất pho đờ típ!"},
+    {vi:"Hẹn gặp lại bạn lần sau nhé!",en:"See you next time!",ph:"Xi diu nếch tham!"},
+    {vi:"Chúc bạn một ngày thật vui vẻ!",en:"Have a wonderful day!",ph:"Hép ơ quăn-đờ-phun đây!"}
+  ],
+  [
+    {vi:"Bạn có muốn làm thêm sơn gel cho bền màu không?",en:"Would you like to upgrade to gel polish? It lasts longer.",ph:"Quút diu lai tu ắp-gờ-rết tu gieo po-lít? Ít lát loong-gờ."},
+    {vi:"Bạn có muốn vẽ thêm kiểu hay đính đá không?",en:"Would you like any nail design or rhinestones?",ph:"Quút diu lai e-ni neo đi-dai o rai-xờ-tôn?"},
+    {vi:"Gói làm chân đặc biệt có mát-xa đá nóng thích lắm!",en:"Our deluxe pedicure with hot stone massage feels amazing!",ph:"Ao-ờ đi-lắc pe-đi-kiu quít hót xờ-tôn mát-xa phiu ơ-mây-ding!"}
+  ],
+  [
+    {vi:"Gia đình và các bé nhà bạn dạo này khỏe không?",en:"How is your family and the kids doing?",ph:"Hao i gio phe-mi-li en đờ kít đu-ing?"},
+    {vi:"Hôm nay công việc của bạn có bận rộn lắm không?",en:"Was work busy for you today?",ph:"Quơ quớc bi-di pho diu tu-đây?"},
+    {vi:"Lâu rồi mới thấy bạn ghé tiệm, dạo này mọi thứ ổn chứ?",en:"Long time no see! Is everything going well with you?",ph:"Loong tham nô xi! I e-vờ-ri-thinh gâu-ing queo quít diu?"}
+  ],
+  [
+    {vi:"Ôi mình xin lỗi nhé, để mình sửa lại ngay cho bạn!",en:"Oh, I am so sorry! Let me fix that for you right away.",ph:"Ô, ai em xô xo-ri! Lét mi phích đát pho diu rai ơ-quây."},
+    {vi:"Nếu chưa ưng màu này, bạn có thể đổi màu khác nhé.",en:"If you do not like this color, we can change it for you.",ph:"Íp diu đu nót lai đít ca-lờ, quy ken chen ít pho diu."},
+    {vi:"Mình dũa như vậy có làm bạn đau chỗ nào không?",en:"Am I filing too hard? Please let me know if it hurts.",ph:"Em ai phai-ling tu hạc? Pờ-li lét mi nô íp ít hớt."}
+  ],
+  [
+    {vi:"Bạn muốn làm móng bột, Gel-X, Builder gel hay Dual form?",en:"Would you like acrylic, Gel-X, builder gel, or dual form?",ph:"Quút diu lai ơ-cờ-ri-líc, gieo-ếch, biu-đờ gieo, o đu-ồ phom?"},
+    {vi:"Hôm nay bạn đắp nguyên bộ mới hay chỉ dặm lại chân móng?",en:"Do you need a full set or just a fill-in today?",ph:"Đu diu nít ơ phun xét o chớt ơ phiu-in tu-đây?"},
+    {vi:"Builder gel giúp móng thật của bạn cứng cáp và tự nhiên hơn.",en:"Builder gel helps strengthen your natural nails.",ph:"Biu-đờ gieo hép xờ-tờ-ren-thần gio ne-chờ-rồ neo."},
+    {vi:"Bạn muốn vẽ đầu móng French truyền thống hay French màu?",en:"Would you like a classic white French tip or colored French?",ph:"Quút diu lai ơ cờ-lát-xích quai phờ-ren típ o ca-lờ phờ-ren?"},
+    {vi:"Bạn muốn vẽ kiểu cho tất cả các ngón hay chỉ 2 ngón điểm nhấn?",en:"Would you like nail design on all fingers or just accent nails?",ph:"Quút diu lai neo đi-dai on ôn phin-gờ o chớt ắc-xần neo?"},
+    {vi:"Bạn có mẫu hình nào trên điện thoại muốn mình vẽ theo không?",en:"Do you have a design picture on your phone you want me to copy?",ph:"Đu diu hép ơ đi-dai pích-chờ on gio phôn diu quăn mi tu cóp-pi?"}
+  ]
+];
+var cat=0,idx=0;
+
+function render(){
+  var it=data[cat][idx];
+  document.getElementById('viMean').innerText=it.vi;
+  document.getElementById('enTxt').innerText=it.en;
+  document.getElementById('phonTxt').innerText=it.ph;
+  document.getElementById('cnt').innerText=(idx+1)+"/"+data[cat].length;
+  document.getElementById('resTxt').innerText="Bấm nút xanh và đọc to câu tiếng Anh ở trên";
+  document.getElementById('resTxt').style.color="#ccc";
+}
+function setCat(c,el){
+  cat=c;idx=0;
+  document.querySelectorAll('#v2 .tab').forEach(t=>t.classList.remove('on'));
+  el.classList.add('on');render();
+}
+function move(s){
+  idx+=s;
+  if(idx<0)idx=data[cat].length-1;
+  if(idx>=data[cat].length)idx=0;
+  render();
+}
+function playV(r){
+  window.speechSynthesis.cancel();
+  var u=new SpeechSynthesisUtterance(data[cat][idx].en);
+  u.lang='en-US';u.rate=r;window.speechSynthesis.speak(u);
+}
+function chkSpk(){
+  if(!rc)return alert("Mở bằng Safari trên iPhone!");
+  var b=document.getElementById('micBtn'),rs=document.getElementById('resTxt');
+  b.classList.add('rec');b.innerText="👂 Đang nghe bạn đọc...";rs.innerText="Hãy đọc rõ ràng câu tiếng Anh...";
+  try{rc.abort()}catch(e){}
+  rc.lang='en-US';
+  rc.onresult=function(e){
+    b.classList.remove('rec');b.innerText="🎤 Bấm để đọc thử";
+    var sp=e.results.item(0).item(0).transcript;
+    var tg=data[cat][idx].en.toLowerCase().replace(/[^a-z0-9 ]/g,"");
+    var cs=sp.toLowerCase().replace(/[^a-z0-9 ]/g,"");
+    var tw=tg.split(" "),m=0;
+    tw.forEach(w=>{if(cs.indexOf(w)!==-1)m++});
+    var sc=Math.round((m/tw.length)*100);
+    if(sc>=80){rs.style.color="#4cd964";rs.innerText="🎉 Tuyệt vời ("+sc+"%): \""+sp+"\""}
+    else if(sc>=50){rs.style.color="#ffd60a";rs.innerText="👍 Khá tốt ("+sc+"%): \""+sp+"\". Thử lại chút nữa!"}
+    else{rs.style.color="#ff453a";rs.innerText="😅 Chưa rõ ("+sc+"%): \""+sp+"\". Bấm Nghe Chậm nhé!"}
+  };
+  rc.onerror=function(){b.classList.remove('rec');b.innerText="🎤 Bấm để đọc thử";rs.innerText="Không nghe rõ, bạn hãy bấm và đọc lại nhé."};
+  rc.start();
+}
+render();
+</script>
+</body>
+</html>
