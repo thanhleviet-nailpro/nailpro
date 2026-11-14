@@ -69,6 +69,7 @@ input{width:100%;padding:12px;margin:10px 0;border-radius:10px;border:2px solid 
   box-shadow: 0 0 15px rgba(255, 183, 3, 0.8) !important;
   transform: scale(0.96);
 }
+.flash{background:#00f5d4!important;color:#000000!important;border-color:#ffffff!important;box-shadow:0 0 18px rgba(0,245,212,0.9)!important;transform:scale(0.95)!important}
 </style>
 </head>
 <body>
@@ -387,6 +388,13 @@ function chkSpk(){
   rc.start();
 }
 render();
+document.querySelectorAll('.b-aud, .b-nav, .b-mic, .mic').forEach(function(btn){
+  btn.addEventListener('touchstart', function(){
+    var el = this;
+    el.classList.add('flash');
+    setTimeout(function(){ el.classList.remove('flash'); }, 250);
+  }, {passive: true});
+});
 </script>
 </body>
 </html>
