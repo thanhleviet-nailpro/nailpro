@@ -93,10 +93,19 @@ input{width:100%;padding:12px;margin:10px 0;border-radius:10px;border:2px solid 
     <div><small style="color:#888">BẢN DỊCH / TIẾNG ANH:</small><div id="t" class="trans">...</div></div>
     <button onclick="reSpk()" style="align-self:flex-end;background:#333;color:#fff;border:none;padding:6px 12px;border-radius:8px">🔊 Đọc lại</button>
   </div>
-  <div class="tabs">
-    <button class="tab on" onclick="tab(1,this)">1. Đón & Hỏi</button>
-    <button class="tab" onclick="tab(2,this)">2. Làm Móng & Spa</button>
-    <button class="tab" onclick="tab(3,this)">3. 💰 Giá & Tiền</button>
+      <div class="tabs">
+    <button class="tab on" onclick="setCat(0,this)">1. Đón khách</button>
+    <button class="tab" onclick="setCat(1,this)">2. Hỏi dịch vụ</button>
+    <button class="tab" onclick="setCat(2,this)">3. Làm móng</button>
+    <button class="tab" onclick="setCat(3,this)">4. Màu & Thiết kế</button>
+    <button class="tab" onclick="setCat(4,this)">5. Điều chỉnh</button>
+    <button class="tab" onclick="setCat(5,this)">6. Gần hoàn thành</button>
+    <button class="tab" onclick="setCat(6,this)">7. Thanh toán & Tip</button>
+    <button class="tab" onclick="setCat(7,this)">8. Chăm sóc & Hẹn</button>
+    <button class="tab" onclick="setCat(8,this)">9. Đông khách</button>
+    <button class="tab" onclick="setCat(9,this)">10. Xã giao</button>
+    <button class="tab" onclick="setCat(10,this)">11. Khách hay hỏi</button>
+    <button class="tab" onclick="setCat(11,this)">12. Phàn nàn & Xử lý</button>
   </div>
   <div id="t1" class="list on">
     <button class="chip" onclick="say('Hi, welcome in! What would you like to get done today?','Chào bạn! Hôm nay bạn muốn làm dịch vụ gì?',this)">Chào & Hỏi dịch vụ</button>
@@ -137,17 +146,20 @@ input{width:100%;padding:12px;margin:10px 0;border-radius:10px;border:2px solid 
 </div>
 <!-- CHẾ ĐỘ 2: LUYỆN NÓI 50+ (8 CHỦ ĐỀ) -->
 <div id="v2" class="view">
-  <div class="tabs">
-    <button class="tab on" onclick="setCat(0,this)">1. Chào & Hỏi</button>
-    <button class="tab" onclick="setCat(1,this)">2. Làm Móng</button>
-    <button class="tab" onclick="setCat(2,this)">3. Tay Chân Chuyên Sâu</button>
-    <button class="tab" onclick="setCat(3,this)">4. Xã Giao Vui</button>
-    <button class="tab" onclick="setCat(4,this)">5. Tính Tiền</button>
-    <button class="tab" onclick="setCat(5,this)">6. Mời Thêm DV</button>
-    <button class="tab" onclick="setCat(6,this)">7. Gia Đình</button>
-    <button class="tab" onclick="setCat(7,this)">8. Xử Lý Phàn Nàn</button>
-    <button class="tab" onclick="setCat(8,this)">9. Kỹ Thuật & Mẫu Vẽ</button>
-    <button class="tab" onclick="setCat(9,this)">10. Khách Hay Hỏi</button>
+    <div class="tabs">
+    <button class="tab on" onclick="setCat(0,this)">1. Đón khách</button>
+    <button class="tab" onclick="setCat(1,this)">2. Hỏi dịch vụ</button>
+    <button class="tab" onclick="setCat(2,this)">3. Chân & Spa</button>
+    <button class="tab" onclick="setCat(3,this)">4. Làm móng</button>
+    <button class="tab" onclick="setCat(4,this)">5. Màu & Thiết kế</button>
+    <button class="tab" onclick="setCat(5,this)">6. Điều chỉnh</button>
+    <button class="tab" onclick="setCat(6,this)">7. Gần hoàn thành</button>
+    <button class="tab" onclick="setCat(7,this)">8. Thanh toán & Tip</button>
+    <button class="tab" onclick="setCat(8,this)">9. Chăm sóc & Hẹn</button>
+    <button class="tab" onclick="setCat(9,this)">10. Đông khách</button>
+    <button class="tab" onclick="setCat(10,this)">11. Xã giao</button>
+    <button class="tab" onclick="setCat(11,this)">12. Khách hay hỏi</button>
+    <button class="tab" onclick="setCat(12,this)">13. Phàn nàn & Xử lý</button>
   </div>
     <div class="card" style="justify-content:space-between;gap:12px">
     <div style="flex:1;display:flex;flex-direction:column;justify-content:center">
@@ -274,75 +286,119 @@ function mic(l){
 }
 var data=[
   [
-    {vi:"Chào bạn! Hôm nay bạn khỏe không?",en:"Hi! How are you doing today?",ph:"Hai! Hao a diu đu-ing tu-đây?"},
-    {vi:"Hôm nay bạn có hẹn trước chưa?",en:"Do you have an appointment today?",ph:"Đu diu hép ân ơ-poi-mần tu-đây?"},
-    {vi:"Hôm nay bạn muốn làm dịch vụ gì?",en:"What would you like to get done today?",ph:"Quắt quút diu lai tu ghét đăn tu-đây?"},
-    {vi:"Bạn muốn sơn gel hay sơn thường?",en:"Would you like gel polish or regular polish?",ph:"Quút diu lai gieo po-lít o re-giu-lờ po-lít?"},
-    {vi:"Mời bạn đi rửa tay với nước ấm nhé.",en:"Please wash your hands with warm water.",ph:"Pờ-li quát-sờ gio hen quít quom qua-tờ."}
+    {vi:"Chào, hôm nay bạn khỏe không?",en:"Hi, how are you today?",ph:"Hai, hao a diu tơ-đây?"},
+    {vi:"Mời vào!",en:"Welcome in!",ph:"Oeo-căm in!"},
+    {vi:"Bạn có lịch hẹn trước không?",en:"Do you have an appointment?",ph:"Đu diu hép ân ơ-poi-mừn?"},
+    {vi:"Hôm nay tôi có thể giúp gì cho bạn?",en:"How may I help you today?",ph:"Hao mây ai heo-p diu tu-đây?"},
+    {vi:"Mời bạn ngồi.",en:"Please have a seat.",ph:"Pờ-li-dờ hép-vơ xít."},
+    {vi:"Bạn muốn uống nước gì không? (Nước lọc, trà, cà phê?)",en:"Would you like anything to drink? Water, tea, or coffee?",ph:"Quút diu lai e-ni-thinh tu đờ-rinh? Qua-tờ, ti, o cóp-phi?"},
+    {vi:"Hôm nay bạn muốn làm dịch vụ gì?",en:"What would you like to get done today?",ph:"Quắt gút diu lai tu ghét đăn tu-đây?"}
   ],
   [
-    {vi:"Bạn muốn cắt ngắn cỡ nào?",en:"How short would you like them?",ph:"Hao sót quút diu lai đem?"},
-    {vi:"Bạn muốn dũa dáng vuông, tròn hay hạnh nhân?",en:"What shape would you like? Square, round, or almond?",ph:"Quắt sếp quút diu lai? Sờ-que, rao, o a-mần?"},
-    {vi:"Độ dài này ổn với bạn chưa?",en:"Is this length okay for you?",ph:"I đít len ô-kê pho diu?"},
-    {vi:"Có bị đau hay nóng quá không bạn?",en:"Does it hurt or feel too hot?",ph:"Đơ ít hớt o phiu tu hót?"},
-    {vi:"Bạn cho tay vào đèn hơ 60 giây nhé.",en:"Please put your hand in the lamp for 60 seconds.",ph:"Pờ-li pút gio hen in đờ lem pho xích-xờ-ti xe-cần."}
+    {vi:"Bạn làm móng tay hay móng chân?",en:"Manicure or pedicure?",ph:"Me-ni-khia o pe-đi-khia?"},
+    {vi:"Bạn có cần tháo móng cũ ra trước không?",en:"Do you need a soak-off first?",ph:"Đu diu nít ơ xốc-óp phớt?"},
+    {vi:"Bạn làm sơn gel hay sơn thường ạ?",en:"Gel or regular polish?",ph:"Geo o re-giu-lơ po-lít?"},
+    {vi:"Bạn muốn làm bộ mới hay dặm lại móng cũ?",en:"Full set or fill?",ph:"Phun sét o phiu?"},
+    {vi:"Bạn muốn làm bột đắp hay bột nhúng?",en:"Acrylic or dip powder?",ph:"Ơ-crít-lích o đíp pao-đờ?"},
+    {vi:"Bạn muốn làm Builder Gel, Gel-X hay Dual form?",en:"Builder Gel, Gel-X, or Dual form?",ph:"Biu-đơ gieo, gieo-ếch, o điêu-ồ phom?"}
   ],
   [
-    {vi:"Nhiệt độ nước ngâm chân đã vừa với bạn chưa?",en:"Let me know if the water temperature is comfortable for you.",ph:"Lét mi nô íp đờ qua-tờ tem-pờ-rơ-chờ i căm-phơ-tơ-bồ pho diu."},
-    {vi:"Bạn có muốn mình cắt da kỹ không?",en:"Would you like me to trim your cuticles closely?",ph:"Quút diu lai mi tu trim gio kiu-ti-cồ cờ-lâu-li?"},
-    {vi:"Bạn có móng chân quặp nào bị đau không?",en:"Do you have any ingrown toenails that bother you?",ph:"Đu diu hép e-ni in-gờ-râu thâu-neo đát bo-đờ diu?"},
-    {vi:"Bạn có muốn chà gót và tẩy tế bào chết bằng đường không?",en:"Would you like callus removal and a sugar scrub?",ph:"Quút diu lai ca-lớt ri-mu-vồ en ơ su-gờ sờ-cờ-rắp?"},
+    {vi:"Nước như vậy đã vừa ấm chưa ạ?",en:"Is the water temperature okay?",ph:"I-z đờ qua-tờ tem-pờ-rơ-chờ ô-kê?"},
+    {vi:"Bật chế độ ghế massage cho bạn nhé?",en:"Would you like me to turn on the massage chair?",ph:"Quút diu lai mi tu thơn on đờ mát-xa che?"},
+    {vi:"Bạn muốn cắt móng chân ngắn cỡ nào ạ?",en:"How short do you want your toenails?",ph:"Hao sót đu diu quăn gio thâu-neo?"},
+    {vi:"Bạn muốn dũa dáng vuông hay dáng tròn ạ?",en:"Square or round shape?",ph:"Xì-que o rao sếp?"},
+    {vi:"Làm như vậy có bị đau không ạ?",en:"Does it hurt at all?",ph:"Đơ-z ít hớt ét ôn?"},
+    {vi:"Bạn có muốn làm thêm chà gót chân không ạ?",en:"Would you like callus removal?",ph:"Quút diu lai khe-lớt rì-mu-vồ?"},
     {vi:"Bạn có muốn mát-xa đá nóng hay ủ sáp nến ấm không?",en:"Would you like a hot stone massage or paraffin wax?",ph:"Quút diu lai ơ hót xờ-tôn mát-xa o pa-ra-phin quắc-xờ?"},
-    {vi:"Lực bóp mát-xa như vậy đã vừa với bạn chưa?",en:"Is the massage pressure good for you?",ph:"I đờ mát-xa pờ-rét-sờ gút pho diu?"}
+    {vi:"Bạn thích mùi hương nào ạ? (Oải hương, cam hay bạc hà?)",en:"Which scent do you like? Lavender, orange, or mint?",ph:"Quých xen đu diu lai? La-ven-đờ, o-rình, o min?"},
+    {vi:"Lực bóp massage như vậy đã vừa chưa ạ?",en:"Is the massage pressure okay?",ph:"I-z đờ mát-xa prét-sờ ô-kê?"},
+    {vi:"Bạn muốn mình làm mạnh hơn hay nhẹ lại ạ?",en:"Would you like it stronger or lighter?",ph:"Quút diu lai ít xì-troong-gờ o lai-tờ?"},
+    {vi:"Khăn nóng này có bị nóng quá không ạ?",en:"Are the hot towels too hot?",ph:"A đờ hót thao-ồ tu hót?"}
   ],
   [
-    {vi:"Màu này hợp với da của bạn lắm!",en:"This color looks so good on your skin!",ph:"Đít ca-lờ lúc xô gút on gio sờ-kin!"},
-    {vi:"Cuối tuần vừa rồi của bạn thế nào?",en:"How was your weekend?",ph:"Hao quơ gio quých-ken?"},
-    {vi:"Hôm nay thời tiết bên ngoài đẹp quá nhỉ!",en:"The weather is so nice outside today!",ph:"Đờ que-đờ i xô nai ao-xai tu-đây!"},
-    {vi:"Tóc của bạn hôm nay đẹp quá!",en:"I love your hair today! It looks great!",ph:"Ai lớp gio he tu-đây! Ít lúc gờ-rết!"},
-    {vi:"Bạn có kế hoạch gì cho kỳ nghỉ lễ chưa?",en:"Do you have any plans for the holidays?",ph:"Đu diu hép e-ni pờ-len pho đờ ho-li-đây?"}
+    {vi:"Dáng móng này đã ổn chưa bạn?",en:"Is this shape okay?",ph:"Iz đít sếp ô-kê?"},
+    {vi:"Bạn có thích dáng móng này không?",en:"Do you like this shape?",ph:"Đu diu lai đít sếp?"},
+    {vi:"Độ dài này đã ổn với bạn chưa?",en:"Is the length okay for you?",ph:"Iz đờ leng ô-kê pho diu?"},
+    {vi:"Bạn có muốn làm ngắn hơn chút nữa không?",en:"Would you like it a little shorter?",ph:"Út diu lai ít ơ lít-tồ sót-tơ?"},
+    {vi:"Bạn thích để móng ngắn hay dài?",en:"Do you like it short or long?",ph:"Đu diu lai ít sót o loong?"},
+    {vi:"Bạn muốn làm móng vuông, móng thang hay hạnh nhân?",en:"Square, coffin, or almond?",ph:"Sque, cóp-phin, o a-mần?"},
+    {vi:"Bạn cho tay vào đèn hơ 60 giây nhé.",en:"Please put your hand in the lamp for 60 seconds.",ph:"Pờ-li-z pút do hen in đờ lem pho xíc-xì-ti xé-cần."},
+    {vi:"Nếu khó chịu hay nóng thì báo em nhé.",en:"Let me know if it is uncomfortable or too hot.",ph:"Lét mi nâu íp ít-xờ ăn-căm-phơ-tơ-bồ o tu hót."}
   ],
   [
-    {vi:"Bạn kiểm tra lại móng xem ưng ý chưa nhé.",en:"Please check your nails to see if you like them.",ph:"Pờ-li chéc gio neo tu xi íp diu lai đem."},
-    {vi:"Bạn muốn thanh toán tiền mặt hay thẻ?",en:"Would you like to pay with cash or card?",ph:"Quút diu lai tu pây quít két o cạc?"},
-    {vi:"Cảm ơn bạn rất nhiều vì tiền tip nhé!",en:"Thank you so much for the tip!",ph:"Thanh diu xô mất pho đờ típ!"},
-    {vi:"Hẹn gặp lại bạn lần sau nhé!",en:"See you next time!",ph:"Xi diu nếch tham!"},
-    {vi:"Chúc bạn một ngày thật vui vẻ!",en:"Have a wonderful day!",ph:"Hép ơ quăn-đờ-phun đây!"}
+    {vi:"Bạn thích màu sơn gì?",en:"What color would you like?",ph:"Oắt kha-lờ gút diu lai?"},
+    {vi:"Bạn có muốn vẽ móng không?",en:"Do you want any nail art?",ph:"Đu diu quanh e-ni neo ạc?"},
+    {vi:"Bạn muốn làm kiểu French tips như thế nào?",en:"How would you like your French tips done?",ph:"Hao uốt du lai gio Fren-ch típ đăn?"},
+    {vi:"Bạn muốn vẽ hết các ngón hay chỉ vẽ hai ngón thôi?",en:"Do you want designs on all nails or just two?",ph:"Đu diu oăn đi-dai on ôn nêu o chớt tu?"},
+    {vi:"Màu này rất phổ biến.",en:"This color is very popular.",ph:"Đít kha-lơ i ve-ri póp-piu-lơ."},
+    {vi:"Màu này hợp với da của bạn.",en:"This color looks great on your skin.",ph:"Đít co-lơ lúc gờ-rết on gio xờ-kin."},
+    {vi:"Bạn muốn sơn nhám (lì) hay sơn bóng?",en:"Do you want matte or shiny?",ph:"Đu du oẳn mẹt o sai-ni?"},
+    {vi:"Bạn muốn cùng màu hay mỗi móng một màu?",en:"Same color or different colors?",ph:"Xêm kho-lờ o đíp-phờ-rần kho-lờ?"}
   ],
   [
-    {vi:"Bạn có muốn làm thêm sơn gel cho bền màu không?",en:"Would you like to upgrade to gel polish? It lasts longer.",ph:"Quút diu lai tu ắp-gờ-rết tu gieo po-lít? Ít lát loong-gờ."},
-    {vi:"Bạn có muốn vẽ thêm kiểu hay đính đá không?",en:"Would you like any nail design or rhinestones?",ph:"Quút diu lai e-ni neo đi-dai o rai-xờ-tôn?"},
-    {vi:"Gói làm chân đặc biệt có mát-xa đá nóng thích lắm!",en:"Our deluxe pedicure with hot stone massage feels amazing!",ph:"Ao-ờ đi-lắc pe-đi-kiu quít hót xờ-tôn mát-xa phiu ơ-mây-ding!"}
+    {vi:"Như vậy được chưa bạn?",en:"Is this okay for you?",ph:"I đít ô-kê pho diu?"},
+    {vi:"Bạn có muốn chỉnh sửa gì không?",en:"Do you want to change anything?",ph:"Đu diu oan tu trên en-ni-thing?"},
+    {vi:"Tôi sửa lại cho bạn nhé!",en:"I can fix that for you.",ph:"Ai khen phích đát pho diu."},
+    {vi:"Không vấn đề gì, tôi sẽ sửa lại ngay bây giờ.",en:"No problem, I will fix it right now.",ph:"Nâu próp-lầm, ai-ồ phích ít rai nao."},
+    {vi:"Bạn thả lỏng tay giúp tôi nhé.",en:"Please relax your hand.",ph:"Phờ-li-z rì-lác-x do hen."},
+    {vi:"Chúng ta sắp làm xong rồi.",en:"We are almost done.",ph:"Qui a o-mốt đăn."}
   ],
   [
-    {vi:"Gia đình và các bé nhà bạn dạo này khỏe không?",en:"How is your family and the kids doing?",ph:"Hao i gio phe-mi-li en đờ kít đu-ing?"},
-    {vi:"Hôm nay công việc của bạn có bận rộn lắm không?",en:"Was work busy for you today?",ph:"Quơ quớc bi-di pho diu tu-đây?"},
-    {vi:"Lâu rồi mới thấy bạn ghé tiệm, dạo này mọi thứ ổn chứ?",en:"Long time no see! Is everything going well with you?",ph:"Loong tham nô xi! I e-vờ-ri-thinh gâu-ing queo quít diu?"}
+    {vi:"Bạn kiểm tra lại móng giúp tôi nhé.",en:"Please check your nails.",ph:"Pờ-li-zơ chéc do neo-zờ."},
+    {vi:"Bạn có thích chúng không?",en:"Do you like them?",ph:"Đu diu lai đem?"},
+    {vi:"Tôi sẽ sơn lớp phủ bóng cho bạn.",en:"I will add the top coat now.",ph:"Ai-ồ ét đờ tóp cốt nao."},
+    {vi:"Sơn sẽ khô sau vài phút nữa bạn nhé.",en:"It will dry in a few minutes.",ph:"Ít quiu đrai in ơ phiu mi-nịt."},
+    {vi:"Bạn cẩn thận nhé, sơn vẫn còn ướt đấy.",en:"Be careful, it is still wet.",ph:"Bi ke-phun, ít i xờ-tiu quét."},
+    {vi:"Mình thoa chút dầu dưỡng viền móng cho bạn nhé.",en:"Let me put some cuticle oil on for you.",ph:"Lét mi pút xăm kiu-ti-cồ oi-ồ on pho diu."}
   ],
   [
-    {vi:"Ôi mình xin lỗi nhé, để mình sửa lại ngay cho bạn!",en:"Oh, I am so sorry! Let me fix that for you right away.",ph:"Ô, ai em xô xo-ri! Lét mi phích đát pho diu rai ơ-quây."},
-    {vi:"Nếu chưa ưng màu này, bạn có thể đổi màu khác nhé.",en:"If you do not like this color, we can change it for you.",ph:"Íp diu đu nót lai đít ca-lờ, quy ken chen ít pho diu."},
-    {vi:"Mình dũa như vậy có làm bạn đau chỗ nào không?",en:"Am I filing too hard? Please let me know if it hurts.",ph:"Em ai phai-ling tu hạc? Pờ-li lét mi nô íp ít hớt."}
+    {vi:"Tổng cộng của bạn là 85 đô.",en:"Your total is $85.",ph:"Do-ơ tô-tồ i ây-ti phai đo-lơ."},
+    {vi:"Bạn trả tiền mặt hay thẻ?",en:"Cash or card?",ph:"Két o khạc?"},
+    {vi:"Giá này chưa bao gồm tiền tip.",en:"Tip is not included.",ph:"Típ ít nót in-cờ-lú-địt."},
+    {vi:"Bạn có muốn để tiền tip vào thẻ luôn không?",en:"Would you like to leave a tip on your card?",ph:"Quút diu lai tu li-v ơ típ on gio cạc?"},
+    {vi:"Cảm ơn bạn rất nhiều!",en:"Thank you so much!",ph:"Đen-kiu sâu mắt!"},
+    {vi:"Tôi rất cảm kích trước điều đó.",en:"I really appreciate it.",ph:"Ai ria-li ờ-pờ-ri-si-ết ít."}
   ],
   [
-    {vi:"Bạn muốn làm móng bột, Gel-X, Builder gel hay Dual form?",en:"Would you like acrylic, Gel-X, builder gel, or dual form?",ph:"Quút diu lai ơ-cờ-ri-líc, gieo-ếch, biu-đờ gieo, o đu-ồ phom?"},
-    {vi:"Hôm nay bạn đắp nguyên bộ mới hay chỉ dặm lại chân móng?",en:"Do you need a full set or just a fill-in today?",ph:"Đu diu nít ơ phun xét o chớt ơ phiu-in tu-đây?"},
-    {vi:"Builder gel giúp móng thật của bạn cứng cáp và tự nhiên hơn.",en:"Builder gel helps strengthen your natural nails.",ph:"Biu-đờ gieo hép xờ-tờ-ren-thần gio ne-chờ-rồ neo."},
-    {vi:"Bạn muốn vẽ đầu móng French truyền thống hay French màu?",en:"Would you like a classic white French tip or colored French?",ph:"Quút diu lai ơ cờ-lát-xích quai phờ-ren típ o ca-lờ phờ-ren?"},
-    {vi:"Bạn muốn vẽ kiểu cho tất cả các ngón hay chỉ 2 ngón điểm nhấn?",en:"Would you like nail design on all fingers or just accent nails?",ph:"Quút diu lai neo đi-dai on ôn phin-gờ o chớt ắc-xần neo?"},
-    {vi:"Bạn có mẫu hình nào trên điện thoại muốn mình vẽ theo không?",en:"Do you have a design picture on your phone you want me to copy?",ph:"Đu diu hép ơ đi-dai pích-chờ on gio phôn diu quăn mi tu cóp-pi?"}
+    {vi:"Bạn quay lại sau hai tuần nữa nhé.",en:"Come back in two weeks.",ph:"Kăm bách in tu uých."},
+    {vi:"Nhớ dùng dầu dưỡng móng (cuticle oil) mỗi ngày.",en:"Use cuticle oil every day.",ph:"Diu kiu-ti-cồ oi-ồ e-vơ-ri đây."},
+    {vi:"Khi dọn dẹp nhớ mang găng tay.",en:"Wear gloves when cleaning.",ph:"Que-rờ gờ-lớp-sờ quen cờ-li-ninh."},
+    {vi:"Có gì cứ gọi lại tiệm nha.",en:"Call us if anything happens.",ph:"Côn ớt íp én-ni-thing hép-pần."},
+    {vi:"Tôi hy vọng sẽ được gặp lại bạn.",en:"We hope to see you again.",ph:"Quy hốp tu xi diu ờ-gen."}
   ],
-    [
-    {vi:"(Khách hỏi): Ở đây có nhận khách không hẹn trước không?",en:"Do you guys take walk-ins right now?",ph:"Đu diu gai thách quác-in rai nao?"},
-    {vi:"(Khách hỏi): Mình phải đợi khoảng bao lâu nữa tới lượt?",en:"How long is the wait right now?",ph:"Hao loong i đờ quây rai nao?"},
-    {vi:"(Khách hỏi): Làm bộ này thì hết khoảng bao nhiêu tiền?",en:"How much is it for a full set like this?",ph:"Hao mất i ít pho ơ phun xét lai đít?"},
-    {vi:"(Khách hỏi): Mình muốn sửa lại một ngón móng bị gãy này.",en:"I just need a nail repair on this broken finger.",ph:"Ai chớt nít ơ neo ri-pe on đít bờ-rốc-cần phin-gờ."},
-    {vi:"(Khách hỏi): Bạn có thể dũa cho nó ngắn hơn một chút nữa không?",en:"Can you file them down a little bit shorter?",ph:"Ken diu phai đem đao ơ lít-tồ bít sót-tờ?"},
-    {vi:"(Khách hỏi): Mình muốn dũa đầu móng vuông nhưng bo tròn hai góc.",en:"I want them square with rounded corners, please.",ph:"Ai quăn đem sờ-que quít rao-địt co-nờ, pờ-li."},
-    {vi:"(Khách hỏi): Cái móng này hơi bị lệch, bạn chỉnh lại giúp mình nhé.",en:"This nail looks a little crooked, can you fix it?",ph:"Đít neo lúc ơ lít-tồ cờ-rúc-kịt, ken diu phích ít?"},
-    {vi:"(Khách hỏi): Nhẹ tay giúp mình một chút chỗ này hơi đau.",en:"Ouch, be gentle right there, it is a little sore.",ph:"Ao, bi gien-tồ rai đe, ít i ơ lít-tồ xo."},
-    {vi:"(Khách hỏi): Cho mình xin số Wi-Fi của tiệm với.",en:"What is the Wi-Fi password here?",ph:"Quắt i đờ quai-phai pát-quợt hia?"},
-    {vi:"(Khách hỏi): Mình có thể đưa tiền tip qua thẻ được không?",en:"Can I put the tip on my card?",ph:"Ken ai pút đờ típ on mai cạc?"}
+  [
+    {vi:"Tôi phải đợi bao lâu?",en:"How long is the wait?",ph:"Hao loong i-zờ đờ quây?"},
+    {vi:"Khoảng 10 phút nữa sẽ tới lượt bạn nhé.",en:"It will be about 10 minutes.",ph:"Ít quiu bi ơ-bao ten mí-nịt."},
+    {vi:"Xin lỗi vì đã để bạn đợi.",en:"Sorry for the wait.",ph:"Xó-ri pho đờ quết."},
+    {vi:"Hôm nay tiệm hơi đông.",en:"We are very busy today.",ph:"Wia ve-ri bí-dì tơ-đây."},
+    {vi:"Mời bạn ngồi đợi một lát nhé.",en:"Please have a seat and wait a moment.",ph:"Pờ-li-dờ he-vờ ờ xít en quây ơ mâu-mần."}
+  ],
+  [
+    {vi:"Bạn ở khu nào vậy?",en:"Where are you from?",ph:"Que a diu phờ-rom?"},
+    {vi:"Lần đầu bạn ghé tiệm mình hả?",en:"Is this your first time here?",ph:"I-dít-sơ do-ơ phớt-sờ tham hi-ơ?"},
+    {vi:"Bạn đã từng đến tiệm tôi trước đây rồi, đúng không?",en:"You have been here before, right?",ph:"Diu-vơ bin hia bi-pho, rai-t?"},
+    {vi:"Móng bạn mọc nhanh ghê.",en:"Your nails grow very fast.",ph:"Gio neo-x gờ-râu ve-ri phát-xt."},
+    {vi:"Bạn có đôi tay thật đẹp.",en:"You have beautiful hands.",ph:"Diu hép biu-ti-phun hen."},
+    {vi:"Cuối tuần này bạn có kế hoạch gì vui không?",en:"Do you have any fun plans for this weekend?",ph:"Đu diu hép e-ni phăn pờ-len pho đít quých-ken?"}
+  ],
+  [
+    {vi:"Làm trọn bộ này bao nhiêu tiền?",en:"How much for this full set?",ph:"Hao mất pho đít phun sét?"},
+    {vi:"Làm móng này giữ được bao lâu?",en:"How long will this set last?",ph:"Hao long wiu đít sét lát?"},
+    {vi:"Máy mài hơi nóng/đau, làm nhẹ tay chút nhé!",en:"The drill feels hot or hurts a bit, please be gentle.",ph:"Đờ đờ-riu phiu hót o hớt ơ bít, pờ-li bi gien-tồ."},
+    {vi:"Ngồi lâu quá, mình sắp xong chưa em?",en:"How much longer will it take?",ph:"Hao mất long-gơ wiu ít tếch?"},
+    {vi:"Làm có giống y hệt mẫu này không?",en:"Can you replicate this exact design?",ph:"Ken diu rép-li-kết đít ích-dác đi-zai?"},
+    {vi:"Bao giờ thì đến lượt tôi?",en:"How long until it is my turn?",ph:"Hao long ân-tiu ít mai tơn?"},
+    {vi:"Cho mình xin số Wi-Fi của tiệm với.",en:"What is the Wi-Fi password here?",ph:"Quắt i đờ quai-phai pát-quợt hia?"}
+  ],
+  [
+    {vi:"Dũa nóng quá!",en:"Ouch, that burns!",ph:"Ao, đát bơn!"},
+    {vi:"Xin lỗi bạn, mình sẽ làm nhẹ tay lại ngay.",en:"I am so sorry, I will be gentler right away.",ph:"Am sâu xo-ri, ai-ồ bi gien-tờ-lơ rai ơ-guây."},
+    {vi:"Dáng móng này không đều.",en:"This shape looks uneven.",ph:"Đít sếp lúc ân-i-vần."},
+    {vi:"Để mình chỉnh lại cho bạn ngay nhé.",en:"Let me fix that shape for you right now.",ph:"Lét mi phích đát sếp pho diu rai nao."},
+    {vi:"Màu này lên tay không giống màu mẫu.",en:"This color does not look like the swatch.",ph:"Đít ca-lờ đơ-dần lúc lai đờ xờ-goát."},
+    {vi:"Bạn muốn đổi sang màu khác không?",en:"Would you like to switch to another color?",ph:"Wút diu lai tu xờ-guých tu ơ-na-đờ ca-lờ?"},
+    {vi:"Móng mới làm hôm qua mà đã bị tróc rồi.",en:"My nails chipped and I just got them done yesterday.",ph:"Mai neo chíp en ai giớt gót đem đăn dét-tơ-đây."},
+    {vi:"Xin lỗi bạn nhiều, để mình sửa lại miễn phí cho bạn.",en:"I apologize for that, let me fix it for free.",ph:"Ai ơ-po-lơ-giai pho đát, lét mi phích ít pho phờ-ri."}
   ]
 ];
 var cat=0,idx=0;
