@@ -149,22 +149,23 @@ input{width:100%;padding:12px;margin:10px 0;border-radius:10px;border:2px solid 
     <button class="tab" onclick="setCat(8,this)">9. Kỹ Thuật & Mẫu Vẽ</button>
     <button class="tab" onclick="setCat(9,this)">10. Khách Hay Hỏi</button>
   </div>
-  <div class="card">
-    <div>
+    <div class="card" style="justify-content:space-between;gap:12px">
+    <div style="flex:1;display:flex;flex-direction:column;justify-content:center">
       <div style="display:flex;justify-content:space-between;align-items:center">
         <span id="viMean" class="vi-m">...</span>
-        <span id="cnt" style="font-size:12px;color:#888">1/5</span>
+        <span id="cnt" style="font-size:13px;color:#a1a1aa;font-weight:bold">1/5</span>
       </div>
-      <div id="enTxt" class="en-t">...</div>
-      <div class="phon">Mẹo đọc: <b id="phonTxt">...</b></div>
-      <div class="aud-r">
+      <div id="enTxt" class="en-t" style="font-size:26px;margin:12px 0">...</div>
+      <div class="phon" style="font-size:18px;padding:12px">Mẹo đọc: <b id="phonTxt">...</b></div>
+    </div>
+
+    <div class="prac" style="margin-top:0">
+      <button id="micBtn" class="b-mic" onclick="chkSpk()">🎤 Bấm để đọc thử</button>
+      <div id="resTxt" class="res-t">Bấm nút xanh và đọc to câu tiếng Anh ở trên</div>
+      <div class="aud-r" style="margin-top:10px">
         <button class="b-aud" onclick="playV(0.95)">🔊 Nghe chuẩn</button>
         <button class="b-aud" onclick="playV(0.6)">🐢 Nghe chậm</button>
       </div>
-    </div>
-    <div class="prac">
-      <button id="micBtn" class="b-mic" onclick="chkSpk()">🎤 Bấm để đọc thử</button>
-      <div id="resTxt" class="res-t">Bấm nút xanh và đọc to câu tiếng Anh ở trên</div>
     </div>
   </div>
   <div class="nav">
@@ -365,6 +366,7 @@ function move(s){
   if(idx<0)idx=data[cat].length-1;
   if(idx>=data[cat].length)idx=0;
   render();
+  playV(0.95);
 }
 function playV(r){
   window.speechSynthesis.cancel();
