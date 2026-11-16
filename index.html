@@ -107,6 +107,14 @@ html, body {
 /* Nới rộng khung dịch vụ để hiển thị trọn vẹn 4 dòng nút trên iPhone 12 Pro Max */
 .box { flex: 1 1 28% !important; min-height: 95px !important; }
 .list { height: auto !important; max-height: 44dvh !important; flex: 1 1 auto !important; }
+/* Tự động cân đối tỷ lệ và cỡ chữ cho màn hình nhỏ (iPhone 7 Plus) */
+@media (max-height: 750px) {
+  .box { flex: 1 1 36% !important; min-height: 115px !important; padding: 8px 10px !important; }
+  .orig { font-size: 15px !important; margin: 2px 0 4px !important; line-height: 1.25 !important; }
+  .trans { font-size: 20px !important; line-height: 1.25 !important; }
+  .list { max-height: 33dvh !important; }
+  .chip { padding: 8px 10px !important; font-size: 13px !important; }
+}
 </style>
 </head>
 <body>
