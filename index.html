@@ -180,7 +180,7 @@ html, body {
       <input type="number" id="customPrice" placeholder="Nhập số tiền ($)" style="margin:0;padding:8px;font-size:15px;flex:1">
       <button onclick="quotePrice(document.getElementById('customPrice').value)" style="background:#30d158;color:#000;border:none;border-radius:8px;padding:0 14px;font-weight:bold;font-size:14px">🔊 Báo giá</button>
     </div>
-        <button class="chip" onclick="quotePrice(15,this)">$15</button>
+    <button class="chip" onclick="quotePrice(15,this)">$15</button>
     <button class="chip" onclick="quotePrice(20,this)">$20</button>
     <button class="chip" onclick="quotePrice(25,this)">$25</button>
     <button class="chip" onclick="quotePrice(30,this)">$30</button>
@@ -211,8 +211,17 @@ html, body {
     <button id="bV" class="mic" style="background:#ff375f" onclick="mic('vi-VN')">🇻🇳 Thợ nói (VI)</button>
   </div>
 </div>
-<!-- CHẾ ĐỘ 2: LUYỆN NÓI 50+ (8 CHỦ ĐỀ) -->
+<!-- CHẾ ĐỘ 2: GIAO TIẾP (ĐANG CHỜ NỘI DUNG CỦA BẠN) -->
 <div id="v2" class="view">
+  <div class="box" style="justify-content:center;align-items:center;text-align:center">
+    <div style="font-size:20px;font-weight:bold;color:#00f5d4;margin-bottom:8px">💬 Mục Giao Tiếp</div>
+    <div style="color:#a1a1aa;font-size:15px">Khung này đã sẵn sàng để đưa bộ câu giao tiếp của bạn vào!</div>
+  </div>
+</div>
+<!-- CHẾ ĐỘ 3: LUYỆN NÓI -->
+<div id="v3" class="view">
+<!-- CHẾ ĐỘ 2: LUYỆN NÓI 50+ (8 CHỦ ĐỀ) -->
+<div id="v3" class="view">
     <div class="tabs">
     <button class="tab on" onclick="setCat(0,this)">1. Đón khách</button>
     <button class="tab" onclick="setCat(1,this)">2. Hỏi dịch vụ</button>
@@ -258,10 +267,12 @@ html, body {
 <script>
 var lt="",ll="en-US",SR=window.SpeechRecognition||window.webkitSpeechRecognition,rc=SR?new SR():null;
 function setMode(m){
-  document.getElementById('m1').classList.toggle('on',m===1);
-  document.getElementById('m2').classList.toggle('on',m===2);
-  document.getElementById('v1').classList.toggle('on',m===1);
-  document.getElementById('v2').classList.toggle('on',m===2);
+  document.getElementById('m1').classList.toggle('on', m===1);
+  document.getElementById('m2').classList.toggle('on', m===2);
+  document.getElementById('m3').classList.toggle('on', m===3);
+  document.getElementById('v1').classList.toggle('on', m===1);
+  document.getElementById('v2').classList.toggle('on', m===2);
+  document.getElementById('v3').classList.toggle('on', m===3);
 }
 function tab(n,e){
   document.querySelectorAll('#v1 .list').forEach(x=>x.classList.remove('on'));
