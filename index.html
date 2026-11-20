@@ -115,6 +115,9 @@ html, body {
   .list { max-height: 33dvh !important; }
   .chip { padding: 8px 10px !important; font-size: 13px !important; }
 }
+/* Chia 4 Tab của mục Giao tiếp vừa khít màn hình iPhone */
+#v2 .tabs{display:grid!important;grid-template-columns:1fr 1fr 1fr 1fr!important;gap:4px!important;margin-bottom:4px!important;overflow:visible!important}
+#v2 .tab{padding:11px 2px!important;font-size:11px!important;letter-spacing:-0.4px!important;overflow:hidden!important;text-overflow:ellipsis!important}
 </style>
 </head>
 <body>
@@ -211,11 +214,30 @@ html, body {
     <button id="bV" class="mic" style="background:#ff375f" onclick="mic('vi-VN')">🇻🇳 Thợ nói (VI)</button>
   </div>
 </div>
-<!-- CHẾ ĐỘ 2: GIAO TIẾP (ĐANG CHỜ NỘI DUNG CỦA BẠN) -->
+<!-- CHẾ ĐỘ 2: GIAO TIẾP (4 QUY TRÌNH DỊCH VỤ) -->
 <div id="v2" class="view">
-  <div class="box" style="justify-content:center;align-items:center;text-align:center">
-    <div style="font-size:20px;font-weight:bold;color:#00f5d4;margin-bottom:8px">💬 Mục Giao Tiếp</div>
-    <div style="color:#a1a1aa;font-size:15px">Khung này đã sẵn sàng để đưa bộ câu giao tiếp của bạn vào!</div>
+  <div class="box">
+    <div><small style="color:#888">CÂU TIẾNG VIỆT:</small><div id="o2" class="orig">Chọn quy trình bên dưới...</div></div>
+    <div><small style="color:#888">CÂU TIẾNG ANH:</small><div id="t2_txt" class="trans">...</div></div>
+    <button onclick="reSpk()" style="align-self:flex-end;background:#333;color:#fff;border:none;padding:6px 12px;border-radius:8px">🔊 Đọc lại</button>
+  </div>
+  <div class="tabs">
+    <button class="tab on" onclick="tab2(1,this)">Pedicure</button>
+    <button class="tab" onclick="tab2(2,this)">Gel Change</button>
+    <button class="tab" onclick="tab2(3,this)">Manicure</button>
+    <button class="tab" onclick="tab2(4,this)">Dip Powder</button>
+  </div>
+  <div id="g1" class="list on">
+    <div style="color:#a1a1aa;font-size:14px;padding:10px">Đang chờ nội dung mục Pedicure...</div>
+  </div>
+  <div id="g2" class="list">
+    <div style="color:#a1a1aa;font-size:14px;padding:10px">Đang chờ nội dung mục Gel Polish change...</div>
+  </div>
+  <div id="g3" class="list">
+    <div style="color:#a1a1aa;font-size:14px;padding:10px">Đang chờ nội dung mục Manicure...</div>
+  </div>
+  <div id="g4" class="list">
+    <div style="color:#a1a1aa;font-size:14px;padding:10px">Đang chờ nội dung mục Dip Powder...</div>
   </div>
 </div>
 <!-- CHẾ ĐỘ 3: LUYỆN NÓI -->
@@ -534,6 +556,21 @@ document.querySelectorAll('.b-aud, .b-nav, .b-mic, .mic').forEach(function(btn){
     setTimeout(function(){ el.classList.remove('flash'); }, 250);
   }, {passive: true});
 });
+function tab2(n, el){
+  document.querySelectorAll('#v2 .tab').forEach(function(t){ t.classList.remove('on'); });
+  el.classList.add('on');
+  document.querySelectorAll('#v2 .list').forEach(function(l){ l.classList.remove('on'); });
+  document.getElementById('g'+n).classList.add('on');
+}
+function say2(e, v, el){
+  document.getElementById('o2').innerText = v;
+  document.getElementById('t2_txt').innerText = e;
+  lt = e;
+  ll = 'en-US';
+  spk(e, 'en-US');
+  document.querySelectorAll('#v2 .chip').forEach(function(c){ c.classList.remove('on'); });
+  if(el) el.classList.add('on');
+}
 </script>
 </body>
 </html>
