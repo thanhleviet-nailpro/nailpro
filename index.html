@@ -133,13 +133,13 @@ html, body {
   <button id="m2" class="m-btn" onclick="setMode(2)">💬 Giao tiếp</button>
   <button id="m3" class="m-btn" onclick="setMode(3)">🗣️ Luyện nói</button>
 </div>
-<!-- CHẾ ĐỘ 1: DỊCH & BÁO GIÁ NHANH -->
+<!-- CHẾ ĐỘ 1: DỊCH 2 CHIỀU & BÁO GIÁ NHANH -->
 <div id="v1" class="view on">
   <div class="box">
     <div><small style="color:#888">NỘI DUNG GỐC:</small><div id="o" class="orig">Bấm Micro hoặc chọn câu mẫu...</div></div>
     <div><small style="color:#888">BẢN DỊCH / TIẾNG ANH:</small><div id="t" class="trans">...</div></div>
     <div style="display:flex;justify-content:space-between;align-items:flex-end;width:100%;margin-top:4px">
-      <span style="font-size:10px;color:#71717a;font-style:italic"></span>
+      <span style="font-size:10px;color:#71717a;font-style:italic">© thanh.leviet@gmail.com</span>
       <button onclick="reSpk()" style="background:#333;color:#fff;border:none;padding:6px 12px;border-radius:8px">🔊 Đọc lại</button>
     </div>
   </div>
@@ -150,33 +150,32 @@ html, body {
     <button class="tab" onclick="tab(4,this)">4. 💰 Báo Giá</button>
   </div>
   <div id="t1" class="list on">
-    <button class="chip" onclick="say('Welcome in! Do you have an appointment today?','Mời vào! Hôm nay bạn có hẹn trước không?',this)">Mời vào & Hẹn?</button>
-    <button class="chip" onclick="say('Please have a seat. Would you like water, tea, or coffee?','Mời bạn ngồi. Bạn muốn uống nước lọc, trà hay cà phê?',this)">Mời ngồi & Nước?</button>
-    <button class="chip" onclick="say('What would you like to get done today? Manicure or pedicure?','Hôm nay bạn làm gì? Móng tay hay móng chân?',this)">Tay hay Chân?</button>
-    <button class="chip" onclick="say('Do you need a soak-off first?','Bạn có cần tháo móng cũ trước không?',this)">Tháo móng cũ?</button>
-    <button class="chip" onclick="say('Would you like gel polish or regular polish?','Bạn sơn gel hay sơn thường ạ?',this)">Gel hay Sơn thường?</button>
-    <button class="chip" onclick="say('Do you want a full set or just a fill-in?','Làm bộ mới (Full set) hay dặm chân móng (Fill)?',this)">Full set hay Fill?</button>
-    <button class="chip" onclick="say('Would you like acrylic, dip powder, Builder Gel, Gel-X, or Dual form?','Làm bột, Dip, Builder Gel, Gel-X hay Dual form?',this)">Bột / Gel-X / Builder?</button>
-    <button class="chip" onclick="say('Sorry for the wait. It will be about 10 minutes.','Xin lỗi để bạn đợi. Khoảng 10 phút nữa tới lượt bạn nhé.',this)">Đợi 10 phút nhé</button>
+    <button class="chip" onclick="say('Hi! How are you today? Please have a seat.','Chào bạn! Hôm nay bạn khỏe không? Mời bạn ngồi.',this)">Chào & Mời ngồi</button>
+    <button class="chip" onclick="say('Would you like some water?','Bạn có muốn uống nước không?',this)">Mời uống nước?</button>
+    <button class="chip" onclick="say('What would you like to get done today? Manicure or pedicure?','Hôm nay bạn muốn làm gì? Móng tay hay móng chân?',this)">Tay hay Chân?</button>
+    <button class="chip" onclick="say('Would you like me to remove the old dip or polish?','Bạn có muốn tôi tháo lớp bột/sơn cũ không?',this)">Tháo bột/sơn cũ?</button>
+    <button class="chip" onclick="say('Do you want gel polish or regular polish?','Bạn muốn sơn gel hay sơn thường?',this)">Sơn Gel hay Thường?</button>
+    <button class="chip" onclick="say('Acrylic or dip powder?','Bạn muốn làm bột đắp hay bột nhúng?',this)">Bột đắp hay Bột nhúng?</button>
+    <button class="chip" onclick="say('Builder Gel, Gel-X, or Dual Form?','Bạn muốn Builder Gel, Gel-X hay khuôn Dual Form?',this)">Builder / Gel-X / Dual?</button>
+    <button class="chip" onclick="say('Sorry for the wait. About 10 more minutes.','Xin lỗi để bạn chờ. Khoảng 10 phút nữa nhé.',this)">Xin lỗi đợi 10 phút</button>
   </div>
   <div id="t2" class="list">
-    <button class="chip" onclick="say('What shape would you like? Square, coffin, or almond?','Bạn muốn dũa dáng vuông, móng thang hay hạnh nhân?',this)">Dáng Vuông/Thang/Almond?</button>
-    <button class="chip" onclick="say('Is the shape and length okay for you, or a little shorter?','Dáng và độ dài ổn chưa, hay cắt ngắn thêm chút nữa?',this)">Dáng & Dài ổn chưa?</button>
-    <button class="chip" onclick="say('Please relax your hand and put it in the lamp for 60 seconds.','Thả lỏng tay và cho vào đèn hơ 60 giây nhé.',this)">Thả lỏng & Hơ đèn 60s</button>
-    <button class="chip" onclick="say('Let me know if it hurts or feels too hot.','Nếu đau hay nóng quá thì báo em nhé.',this)">Đau hay nóng không?</button>
-    <button class="chip" onclick="say('Is the water temperature okay? Would you like the massage chair on?','Nước ấm vừa chưa? Bật ghế massage cho bạn nhé?',this)">Nước ấm & Ghế massage?</button>
-    <button class="chip" onclick="say('Would you like callus removal, hot stone massage, or paraffin wax?','Chà gót chân, mát-xa đá nóng hay ủ sáp nến ấm không?',this)">Chà gót / Đá nóng / Sáp?</button>
-    <button class="chip" onclick="say('Which scent do you like? Lavender, orange, or mint?','Bạn thích mùi oải hương, cam hay bạc hà?',this)">Mùi Oải hương/Cam/Bạc hà?</button>
-    <button class="chip" onclick="say('Is the massage pressure okay, or stronger or lighter?','Lực bóp vừa chưa, hay mạnh hơn / nhẹ lại ạ?',this)">Lực bóp vừa chưa?</button>
+    <button class="chip" onclick="say('Square, coffin, or almond?','Bạn thích dáng vuông, coffin hay hạnh nhân?',this)">Dáng Vuông/Coffin/Almond?</button>
+    <button class="chip" onclick="say('Do you want square or round nails? A little shorter?','Bạn muốn móng vuông hay tròn? Cắt ngắn hơn một chút nhé?',this)">Vuông/Tròn & Ngắn hơn?</button>
+    <button class="chip" onclick="say('Do you like this thickness and shape?','Bạn thích độ dày và hình dáng móng này không?',this)">Độ dày & Dáng ổn chưa?</button>
+    <button class="chip" onclick="say('Relax your hand, please. Put your hand under the light for 60 seconds.','Bạn thả lỏng tay nhé. Cho tay vào đèn 60 giây nhé.',this)">Thả lỏng & Đèn 60s</button>
+    <button class="chip" onclick="say('Does this hurt? Is the water okay?','Chỗ này có đau không? Nước có vừa không?',this)">Có đau / Nước vừa không?</button>
+    <button class="chip" onclick="say('Would you like me to file your heels?','Bạn có muốn tôi dùng giũa chà gót chân không?',this)">Chà gót chân không?</button>
+    <button class="chip" onclick="say('Is the massage pressure okay? Are you ticklish?','Lực massage có vừa không? Bạn có bị nhột không?',this)">Lực massage / Nhột không?</button>
   </div>
   <div id="t3" class="list">
-    <button class="chip" onclick="say('What color would you like? Matte or shiny top coat?','Bạn thích màu gì? Sơn lì (nhám) hay sơn bóng?',this)">Chọn màu & Lì/Bóng?</button>
-    <button class="chip" onclick="say('How would you like your French tips or nail art done?','Bạn muốn vẽ kiểu French tips hay vẽ mẫu như thế nào?',this)">Vẽ French / Design?</button>
-    <button class="chip" onclick="say('Do you want designs on all nails or just two accent nails?','Vẽ hết các ngón hay chỉ vẽ 2 ngón điểm nhấn?',this)">Vẽ hết hay 2 ngón?</button>
-    <button class="chip" onclick="say('This color looks great on your skin! We are almost done.','Màu này hợp da bạn lắm! Chúng ta sắp làm xong rồi.',this)">Hợp da & Sắp xong</button>
-    <button class="chip" onclick="say('Please check your nails. Do you like them?','Bạn kiểm tra lại móng giúp tôi nhé. Bạn có ưng không?',this)">Kiểm tra móng nhé</button>
-    <button class="chip" onclick="say('I am so sorry! Let me fix that for you right away for free.','Xin lỗi bạn nhiều! Để mình sửa lại miễn phí ngay cho bạn.',this)">Xin lỗi & Sửa miễn phí</button>
-    <button class="chip" onclick="say('Be careful, it is still wet. It will dry in a few minutes.','Cẩn thận sơn còn ướt nhé, sẽ khô sau vài phút nữa.',this)">Cẩn thận sơn còn ướt</button>
+    <button class="chip" onclick="say('What color would you like? Same color as last time?','Bạn muốn màu gì? Có giống màu lần trước không?',this)">Chọn màu / Giống lần trước?</button>
+    <button class="chip" onclick="say('This color is very popular and looks good on you.','Màu này đang rất được ưa chuộng và hợp với da của bạn.',this)">Màu hot & Hợp da bạn</button>
+    <button class="chip" onclick="say('Do you want nail art? All nails or just two?','Bạn có muốn vẽ móng không? Vẽ tất cả hay chỉ hai móng?',this)">Vẽ hết hay 2 móng?</button>
+    <button class="chip" onclick="say('How do you want your French tips?','Bạn muốn đầu móng French kiểu nào?',this)">Đầu móng French kiểu nào?</button>
+    <button class="chip" onclick="say('Is this okay? Do you want to change anything?','Như vậy được không? Bạn muốn đổi gì không?',this)">Ổn chưa / Đổi gì không?</button>
+    <button class="chip" onclick="say('No problem. I can fix that for you right now.','Không sao, tôi sửa lại ngay cho bạn nhé.',this)">Không sao, tôi sửa ngay</button>
+    <button class="chip" onclick="say('I will put on the top coat now.','Tôi sẽ phủ lớp bóng nhé.',this)">Phủ lớp bóng (Top coat)</button>
   </div>
   <div id="t4" class="list">
     <div style="display:flex;gap:6px;width:100%;margin-bottom:4px">
@@ -206,8 +205,8 @@ html, body {
     <button class="chip" onclick="quotePrice(130,this)">$130</button>
     <button class="chip" onclick="quotePrice(140,this)">$140</button>
     <button class="chip" onclick="quotePrice(150,this)">$150</button>
-    <button class="chip" onclick="say('Tip is not included. Would you like to leave a tip on your card?','Giá chưa gồm tip. Bạn có muốn để tip vào thẻ luôn không?',this)">Chưa gồm Tip / Tip thẻ?</button>
-    <button class="chip" onclick="say('Thank you so much! Please use cuticle oil every day and come back in two weeks.','Cảm ơn nhiều! Nhớ bôi dầu dưỡng mỗi ngày và quay lại sau 2 tuần nhé.',this)">Cảm ơn & Hẹn 2 tuần</button>
+    <button class="chip" onclick="say('How would you like to pay? Cash or card?','Bạn muốn thanh toán tiền mặt hay thẻ?',this)">Tiền mặt hay Thẻ?</button>
+    <button class="chip" onclick="say('All done! Thank you! Have a nice day and see you next time.','Xong rồi! Cảm ơn bạn! Chúc một ngày vui vẻ và hẹn gặp lại.',this)">Xong rồi & Hẹn gặp lại</button>
   </div>
   <div class="ctrls">
     <button id="bE" class="mic" style="background:#0a84ff" onclick="mic('en-US')">🇺🇸 Khách nói (EN)</button>
