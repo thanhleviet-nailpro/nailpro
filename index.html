@@ -214,31 +214,26 @@ html, body {
     <button id="bV" class="mic" style="background:#ff375f" onclick="mic('vi-VN')">🇻🇳 Thợ nói (VI)</button>
   </div>
 </div>
-<!-- CHẾ ĐỘ 2: GIAO TIẾP (4 QUY TRÌNH DỊCH VỤ) -->
+<!-- CHẾ ĐỘ 2: GIAO TIẾP (HỘI THOẠI 4 QUY TRÌNH) -->
 <div id="v2" class="view">
-  <div class="box">
-    <div><small style="color:#888">CÂU TIẾNG VIỆT:</small><div id="o2" class="orig">Chọn quy trình bên dưới...</div></div>
-    <div><small style="color:#888">CÂU TIẾNG ANH:</small><div id="t2_txt" class="trans">...</div></div>
-    <button onclick="reSpk()" style="align-self:flex-end;background:#333;color:#fff;border:none;padding:6px 12px;border-radius:8px">🔊 Đọc lại</button>
+  <div class="box" style="padding:10px 12px">
+    <div><small style="color:#888">NGHĨA TIẾNG VIỆT:</small><div id="o2" class="orig" style="margin:2px 0 6px">Chạm vào một câu hội thoại bên dưới...</div></div>
+    <div><small style="color:#888">CÂU TIẾNG ANH:</small><div id="t2_txt" class="trans" style="font-size:21px">...</div></div>
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-top:6px;gap:8px">
+      <div id="ph2_txt" style="font-size:14px;color:#ffb703;font-weight:bold;flex:1">Mẹo đọc: ...</div>
+      <button onclick="reSpk()" style="background:#333;color:#fff;border:none;padding:6px 12px;border-radius:8px;flex-shrink:0">🔊 Đọc lại</button>
+    </div>
   </div>
   <div class="tabs">
-    <button class="tab on" onclick="tab2(1,this)">Pedicure</button>
-    <button class="tab" onclick="tab2(2,this)">Gel Change</button>
-    <button class="tab" onclick="tab2(3,this)">Manicure</button>
-    <button class="tab" onclick="tab2(4,this)">Dip Powder</button>
+    <button class="tab on" onclick="tab2(1,this)">1. Pedicure</button>
+    <button class="tab" onclick="tab2(2,this)">2. Gel Change</button>
+    <button class="tab" onclick="tab2(3,this)">3. Manicure</button>
+    <button class="tab" onclick="tab2(4,this)">4. Dip Powder</button>
   </div>
-  <div id="g1" class="list on">
-    <div style="color:#a1a1aa;font-size:14px;padding:10px">Đang chờ nội dung mục Pedicure...</div>
-  </div>
-  <div id="g2" class="list">
-    <div style="color:#a1a1aa;font-size:14px;padding:10px">Đang chờ nội dung mục Gel Polish change...</div>
-  </div>
-  <div id="g3" class="list">
-    <div style="color:#a1a1aa;font-size:14px;padding:10px">Đang chờ nội dung mục Manicure...</div>
-  </div>
-  <div id="g4" class="list">
-    <div style="color:#a1a1aa;font-size:14px;padding:10px">Đang chờ nội dung mục Dip Powder...</div>
-  </div>
+  <div id="g1" class="list on" style="flex-direction:column;flex-wrap:nowrap;gap:6px"></div>
+  <div id="g2" class="list" style="flex-direction:column;flex-wrap:nowrap;gap:6px"></div>
+  <div id="g3" class="list" style="flex-direction:column;flex-wrap:nowrap;gap:6px"></div>
+  <div id="g4" class="list" style="flex-direction:column;flex-wrap:nowrap;gap:6px"></div>
 </div>
 <!-- CHẾ ĐỘ 3: LUYỆN NÓI -->
 <div id="v3" class="view">
@@ -556,20 +551,150 @@ document.querySelectorAll('.b-aud, .b-nav, .b-mic, .mic').forEach(function(btn){
     setTimeout(function(){ el.classList.remove('flash'); }, 250);
   }, {passive: true});
 });
+var convData = {
+  1: [
+    {r:"Thợ",vi:"Bạn có muốn uống nước không?",en:"Would you like some water?",ph:"Wút diu lai-k sâm wo-tờ?"},
+    {r:"Khách",vi:"Có, cảm ơn bạn.",en:"Yes, please. Thank you.",ph:"Dét, pliiz. Then kiu."},
+    {r:"Thợ",vi:"Hôm nay bạn muốn làm loại chân nào?",en:"What kind of pedicure would you like today?",ph:"Woát kain ờv pe-đi-kiuờ wút diu lai-k tờ-đây?"},
+    {r:"Khách",vi:"Tôi muốn làm loại thường.",en:"I'd like a regular pedicure.",ph:"Ai-đ lai-k ờ re-giu-lờ pe-đi-kiuờ."},
+    {r:"Thợ",vi:"Nước có vừa không?",en:"Is the water okay?",ph:"Iz đờ wo-tờ ô-kây?"},
+    {r:"Khách",vi:"Vâng, nước vừa rồi.",en:"Yes, it's just right.",ph:"Dét, ịts chớt rai-t."},
+    {r:"Thợ",vi:"Bạn muốn tôi cắt móng ngắn hơn không?",en:"Would you like me to cut your toenails shorter?",ph:"Wút diu lai-k mi tu cắt yor tu-neils soọt-tờ?"},
+    {r:"Khách",vi:"Có, ngắn hơn một chút.",en:"Yes, a little shorter.",ph:"Dét, ờ li-tồ soọt-tờ."},
+    {r:"Thợ",vi:"Chỗ này có đau không?",en:"Does this hurt?",ph:"Đâz đis hơrt?"},
+    {r:"Khách",vi:"Không, không đau.",en:"No, it doesn't hurt.",ph:"Nâu, ịt đâz-ần hơrt."},
+    {r:"Thợ",vi:"Bạn có muốn tôi dùng giũa chà gót chân không?",en:"Would you like me to file your heels?",ph:"Wút diu lai-k mi tu fai-ồ yor hi-ồz?"},
+    {r:"Khách",vi:"Có, làm ơn.",en:"Yes, please.",ph:"Dét, pliiz."},
+    {r:"Thợ",vi:"Bạn có bị nhột không?",en:"Are you ticklish?",ph:"Ar diu ti-kờ-lish?"},
+    {r:"Khách",vi:"Có, hơi nhột một chút.",en:"Yes, a little.",ph:"Dét, ờ li-tồ."},
+    {r:"Thợ",vi:"Lực massage có vừa không?",en:"Is the massage pressure okay?",ph:"Iz đờ mờ-saj pre-shờ ô-kây?"},
+    {r:"Khách",vi:"Vừa rồi, cảm ơn.",en:"It's just right, thank you.",ph:"Ịts chớt rai-t, then kiu."},
+    {r:"Thợ",vi:"Bạn bỏ chân lại vào nước nhé.",en:"Please put your feet back in the water.",ph:"Pliiz pút yor fit bek in đờ wo-tờ."},
+    {r:"Khách",vi:"Được rồi.",en:"Okay.",ph:"Ô-kây."},
+    {r:"Thợ",vi:"Bạn muốn màu gì?",en:"What color would you like?",ph:"Woát câ-lờ wút diu lai-k?"},
+    {r:"Khách",vi:"Tôi muốn màu đỏ.",en:"I'd like red.",ph:"Ai-đ lai-k red."},
+    {r:"Thợ",vi:"Bạn có thích màu này không?",en:"Do you like this color?",ph:"Đu diu lai-k đis câ-lờ?"},
+    {r:"Khách",vi:"Có, đẹp lắm.",en:"Yes, it's pretty.",ph:"Dét, ịts pri-đi."},
+    {r:"Thợ",vi:"Mọi thứ đều ổn chứ?",en:"Is everything okay?",ph:"Iz ev-ri-thing ô-kây?"},
+    {r:"Khách",vi:"Vâng, mọi thứ đều tốt.",en:"Yes, everything is good.",ph:"Dét, ev-ri-thing iz gút."},
+    {r:"Thợ",vi:"Xong rồi! Chúc bạn một ngày vui vẻ!",en:"All done! Have a nice day!",ph:"Ol đân! Hév ờ nai-s đâi!"},
+    {r:"Khách",vi:"Cảm ơn! Bạn cũng vậy nhé.",en:"Thank you! You too.",ph:"Then kiu! Diu tu."}
+  ],
+  2: [
+    {r:"Thợ",vi:"Bạn muốn sơn gel không?",en:"Would you like gel polish?",ph:"Wút diu lai-k jen po-lish?"},
+    {r:"Khách",vi:"Có, tôi muốn sơn gel.",en:"Yes, I'd like gel polish.",ph:"Dét, ai-đ lai-k jen po-lish."},
+    {r:"Thợ",vi:"Sơn gel giá 25 đô. Bạn có muốn làm không?",en:"Gel polish is 25 dollars. Would you like it?",ph:"Jen po-lish iz twen-ti fai đô-lờz. Wút diu lai-k ịt?"},
+    {r:"Khách",vi:"Vâng, tôi muốn làm.",en:"Yes, I'd like that.",ph:"Dét, ai-đ lai-k đét."},
+    {r:"Thợ",vi:"Gel giữ được lâu hơn.",en:"Gel polish lasts longer.",ph:"Jen po-lish lest long-gờ."},
+    {r:"Khách",vi:"Ồ, tốt quá!",en:"Oh, that's good!",ph:"Ô, đét iz gút!"},
+    {r:"Thợ",vi:"Gel khô ngay dưới đèn. Bạn không cần đợi.",en:"Gel dries under the lamp. You don't have to wait.",ph:"Jen đrai-z ân-đờ đờ lem. Diu đônt hev tu quâyt."},
+    {r:"Khách",vi:"Tốt quá!",en:"That's great!",ph:"Đéts grây-t!"},
+    {r:"Thợ",vi:"Bạn có thể mang giày ngay.",en:"You can put your shoes on right away.",ph:"Diu ken pút yor shu-z on rai-t ờ-uây."},
+    {r:"Khách",vi:"Tuyệt quá!",en:"Perfect!",ph:"Pơ-fẹkt!"},
+    {r:"Thợ",vi:"Xong rồi nhé!",en:"All done!",ph:"Ol đân!"},
+    {r:"Khách",vi:"Cảm ơn bạn!",en:"Thank you!",ph:"Then kiu!"},
+    {r:"Thợ",vi:"Chúc bạn một ngày vui vẻ!",en:"Have a nice day!",ph:"Hév ờ nai-s đâi!"},
+    {r:"Khách",vi:"Cảm ơn! Bạn cũng vậy nhé.",en:"Thank you! You too.",ph:"Then kiu! Diu tu."}
+  ],
+  3: [
+    {r:"Thợ",vi:"Chào bạn! Hôm nay bạn khỏe không?",en:"Hi! How are you today?",ph:"Hai! Hao ar diu tờ-đây?"},
+    {r:"Khách",vi:"Tôi khỏe, cảm ơn. Còn bạn?",en:"I'm good, thank you. How are you?",ph:"Aim gút, then kiu. Hao ar diu?"},
+    {r:"Thợ",vi:"Tôi khỏe, cảm ơn!",en:"I'm good, thank you!",ph:"Aim gút, then kiu!"},
+    {r:"Thợ",vi:"Bạn có muốn uống nước không?",en:"Would you like some water?",ph:"Wút diu lai-k sâm wo-tờ?"},
+    {r:"Khách",vi:"Có, cảm ơn bạn.",en:"Yes, please. Thank you.",ph:"Dét, pliiz. Then kiu."},
+    {r:"Thợ",vi:"Hôm nay bạn muốn làm móng gì?",en:"What would you like to get done today?",ph:"Woát wút diu lai-k tu get đân tờ-đây?"},
+    {r:"Khách",vi:"Tôi muốn làm móng tay.",en:"I'd like a manicure.",ph:"Ai-đ lai-k ờ ma-ni-kiuờ."},
+    {r:"Thợ",vi:"Bạn muốn sơn gel hay sơn thường?",en:"Do you want gel polish or regular polish?",ph:"Đu diu woăn jen po-lish o re-giu-lờ po-lish?"},
+    {r:"Khách",vi:"Tôi muốn sơn gel.",en:"I want gel polish.",ph:"Ai woăn jen po-lish."},
+    {r:"Thợ",vi:"Bạn muốn cắt móng ngắn hơn không?",en:"Do you want your nails shorter?",ph:"Đu diu woăn yor neils soọt-tờ?"},
+    {r:"Khách",vi:"Có, ngắn hơn một chút.",en:"Yes, a little shorter.",ph:"Dét, ờ li-tồ soọt-tờ."},
+    {r:"Thợ",vi:"Bạn muốn móng vuông hay tròn?",en:"Do you want square or round nails?",ph:"Đu diu woăn sku-e o raund neils?"},
+    {r:"Khách",vi:"Tôi muốn móng vuông.",en:"I want square nails.",ph:"Ai woăn sku-e neils."},
+    {r:"Thợ",vi:"Bạn có muốn cắt da không?",en:"Do you want your cuticles trimmed?",ph:"Đu diu woăn yor kiu-ti-cồz trimd?"},
+    {r:"Khách",vi:"Có, làm ơn.",en:"Yes, please.",ph:"Dét, pliiz."},
+    {r:"Thợ",vi:"Chỗ này có đau không?",en:"Does this hurt?",ph:"Đâz đis hơrt?"},
+    {r:"Khách",vi:"Không, không đau.",en:"No, it doesn't hurt.",ph:"Nâu, ịt đâz-ần hơrt."},
+    {r:"Thợ",vi:"Bạn muốn màu gì?",en:"What color would you like?",ph:"Woát câ-lờ wút diu lai-k?"},
+    {r:"Khách",vi:"Tôi muốn màu đỏ.",en:"I want red.",ph:"Ai woăn red."},
+    {r:"Thợ",vi:"Bạn có thích màu này không?",en:"Do you like this color?",ph:"Đu diu lai-k đis câ-lờ?"},
+    {r:"Khách",vi:"Có, tôi thích màu này.",en:"Yes, I like this color.",ph:"Dét, ai lai-k đis câ-lờ."},
+    {r:"Thợ",vi:"Bạn đặt tay vào đèn nhé.",en:"Please put your hand under the lamp.",ph:"Pliiz pút yor hend ân-đờ đờ lem."},
+    {r:"Khách",vi:"Được rồi.",en:"Okay.",ph:"Ô-kây."},
+    {r:"Thợ",vi:"Mọi thứ ổn chứ?",en:"Is everything okay?",ph:"Iz ev-ri-thing ô-kây?"},
+    {r:"Khách",vi:"Vâng, mọi thứ đều tốt.",en:"Yes, everything is good.",ph:"Dét, ev-ri-thing iz gút."},
+    {r:"Thợ",vi:"Xong rồi nhé!",en:"All done!",ph:"Ol đân!"},
+    {r:"Khách",vi:"Cảm ơn bạn!",en:"Thank you!",ph:"Then kiu!"},
+    {r:"Thợ",vi:"Chúc bạn một ngày vui vẻ!",en:"Have a nice day!",ph:"Hév ờ nai-s đâi!"}
+  ],
+  4: [
+    {r:"Thợ",vi:"Chào bạn! Hôm nay bạn khỏe không?",en:"Hi! How are you today?",ph:"Hai! Hao a diu tờ-đây?"},
+    {r:"Khách",vi:"Tôi khỏe, cảm ơn.",en:"I'm good, thanks.",ph:"Aim gút, theng-k."},
+    {r:"Thợ",vi:"Hôm nay bạn muốn làm bột không?",en:"Would you like dip powder today?",ph:"Wút diu lai-k đíp pao-đờ tờ-đây?"},
+    {r:"Khách",vi:"Có, tôi muốn làm bột.",en:"Yes, I'd like dip powder.",ph:"Dét, aid lai-k đíp pao-đờ."},
+    {r:"Thợ",vi:"Bạn muốn giữ móng dài hay cắt ngắn?",en:"Do you want to keep them long or short?",ph:"Đu diu want tu kiip đem long o sho-t?"},
+    {r:"Khách",vi:"Cắt ngắn một chút.",en:"A little shorter, please.",ph:"Ờ li-đồ sho-đờ, pliiz."},
+    {r:"Thợ",vi:"Bạn muốn móng vuông hay tròn?",en:"Do you want square or round?",ph:"Đu diu want skue o rao-nd?"},
+    {r:"Khách",vi:"Móng vuông nhé.",en:"Square, please.",ph:"Skue, pliiz."},
+    {r:"Thợ",vi:"Bạn muốn màu gì?",en:"What color would you like?",ph:"Quát cơ-lờ wút diu lai-k?"},
+    {r:"Khách",vi:"Màu đỏ nhé.",en:"Red, please.",ph:"Rét, pliiz."},
+    {r:"Thợ",vi:"Bạn muốn màu giống lần trước không?",en:"Do you want the same color as last time?",ph:"Đu diu want đờ sêm cơ-lờ az lát taim?"},
+    {r:"Khách",vi:"Vâng, giống lần trước.",en:"Yes, the same color.",ph:"Dét, đờ sêm cơ-lờ."},
+    {r:"Thợ",vi:"Bạn có muốn thêm móng dài không?",en:"Would you like nail extensions?",ph:"Wút diu lai-k nai-l ik-sten-shầnz?"},
+    {r:"Khách",vi:"Không, chỉ làm móng tự nhiên.",en:"No, just my natural nails.",ph:"Nâu, chớt mai na-chờ-rồ nai-lz."},
+    {r:"Thợ",vi:"Bạn có muốn tôi tháo bột cũ không?",en:"Would you like me to remove the old dip?",ph:"Wút diu lai-k mi tu ri-muuv đờ ôuld đíp?"},
+    {r:"Khách",vi:"Có, làm ơn.",en:"Yes, please.",ph:"Dét, pliiz."},
+    {r:"Thợ",vi:"Chỗ này có đau không?",en:"Does it hurt here?",ph:"Đâz ít hớt hiờ?"},
+    {r:"Khách",vi:"Không, không đau.",en:"No, it doesn't hurt.",ph:"Nâu, ít đâ-zần hớt."},
+    {r:"Thợ",vi:"Tôi sẽ làm móng cho bạn nhé.",en:"I'll do your nails now.",ph:"Ao đu do nai-lz nao."},
+    {r:"Khách",vi:"Được, cảm ơn.",en:"Okay, thank you.",ph:"Ô-kây, then-kiu."},
+    {r:"Thợ",vi:"Bạn thích độ dày này không?",en:"Do you like this thickness?",ph:"Đu diu lai-k đis thík-nəs?"},
+    {r:"Khách",vi:"Mỏng hơn một chút.",en:"A little thinner, please.",ph:"Ờ li-đồ thin-nờ, pliiz."},
+    {r:"Thợ",vi:"Bạn có thích hình dáng móng không?",en:"Do you like the shape?",ph:"Đu diu lai-k đờ shâyp?"},
+    {r:"Khách",vi:"Vâng, rất đẹp.",en:"Yes, it looks good.",ph:"Dét, ít lúk-s gút."},
+    {r:"Thợ",vi:"Tôi sẽ phủ lớp bóng nhé.",en:"I'll put on the top coat.",ph:"Ao pút on đờ tóp côt."},
+    {r:"Khách",vi:"Được.",en:"Okay.",ph:"Ô-kây."},
+    {r:"Thợ",vi:"Bạn có thích màu này không?",en:"Do you like this color?",ph:"Đu diu lai-k đis cơ-lờ?"},
+    {r:"Khách",vi:"Có, tôi rất thích.",en:"Yes, I love it.",ph:"Dét, ai lâv ít."},
+    {r:"Thợ",vi:"Mọi thứ ổn chứ?",en:"Is everything okay?",ph:"Iz ev-ri-thing ô-kây?"},
+    {r:"Khách",vi:"Vâng, hoàn hảo.",en:"Yes, it's perfect.",ph:"Dét, íts pơ-phẹt."},
+    {r:"Thợ",vi:"Xong rồi! Cảm ơn bạn.",en:"All done! Thank you.",ph:"Ol đân! Then-kiu."},
+    {r:"Khách",vi:"Cảm ơn! Hẹn gặp lại.",en:"Thank you! See you next time.",ph:"Then kiu! Si diu nekst taim."}
+  ]
+};
+
+function initConv(){
+  for(var k=1; k<=4; k++){
+    var box = document.getElementById('g'+k);
+    if(!box) continue;
+    box.innerHTML = '';
+    convData[k].forEach(function(item){
+      var b = document.createElement('button');
+      b.className = 'chip';
+      var isTho = (item.r === 'Thợ');
+      b.style.cssText = 'width:100%;text-align:left;display:flex;flex-direction:column;gap:2px;padding:10px 12px;border-left:5px solid ' + (isTho ? '#00f5d4' : '#ffb703');
+      b.innerHTML = '<span style="font-size:11px;font-weight:800;color:' + (isTho ? '#00f5d4' : '#ffb703') + '">' + (isTho ? '💅 THỢ NÓI:' : '👩 KHÁCH TRẢ LỜI:') + '</span>'
+                  + '<span style="font-size:14px;color:#ffffff;font-weight:700">' + item.vi + '</span>'
+                  + '<span style="font-size:13px;color:#a1a1aa;font-weight:500">' + item.en + '</span>';
+      b.onclick = function(){
+        document.getElementById('o2').innerText = item.vi;
+        document.getElementById('t2_txt').innerText = item.en;
+        document.getElementById('ph2_txt').innerText = 'Mẹo đọc: ' + item.ph;
+        lt = item.en; ll = 'en-US';
+        spk(item.en, 'en-US');
+        document.querySelectorAll('#v2 .chip').forEach(function(c){ c.classList.remove('on'); });
+        b.classList.add('on');
+      };
+      box.appendChild(b);
+    });
+  }
+}
+initConv();
+
 function tab2(n, el){
   document.querySelectorAll('#v2 .tab').forEach(function(t){ t.classList.remove('on'); });
   el.classList.add('on');
   document.querySelectorAll('#v2 .list').forEach(function(l){ l.classList.remove('on'); });
   document.getElementById('g'+n).classList.add('on');
-}
-function say2(e, v, el){
-  document.getElementById('o2').innerText = v;
-  document.getElementById('t2_txt').innerText = e;
-  lt = e;
-  ll = 'en-US';
-  spk(e, 'en-US');
-  document.querySelectorAll('#v2 .chip').forEach(function(c){ c.classList.remove('on'); });
-  if(el) el.classList.add('on');
 }
 </script>
 </body>
