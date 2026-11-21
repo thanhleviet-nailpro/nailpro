@@ -118,6 +118,12 @@ html, body {
 /* Chia 4 Tab của mục Giao tiếp vừa khít màn hình iPhone */
 #v2 .tabs{display:grid!important;grid-template-columns:1fr 1fr 1fr 1fr!important;gap:4px!important;margin-bottom:4px!important;overflow:visible!important}
 #v2 .tab{padding:11px 2px!important;font-size:11px!important;letter-spacing:-0.4px!important;overflow:hidden!important;text-overflow:ellipsis!important}
+
+.voice-bar{display:flex;align-items:center;gap:6px;padding:5px 2px 7px;flex-shrink:0;font-size:12px;color:#e4e4e7}
+.voice-bar label{white-space:nowrap;font-weight:700}
+.voice-bar select{min-width:0;flex:1;background:#27272a;color:#fff;border:1px solid #52525b;border-radius:8px;padding:7px 6px;font-size:12px}
+.voice-bar button{background:#3a3a40;color:#fff;border:1px solid #666;border-radius:8px;padding:7px 9px;font-size:12px;font-weight:700;white-space:nowrap}
+
 </style>
 </head>
 <body>
@@ -132,6 +138,17 @@ html, body {
   <button id="m1" class="m-btn on" onclick="setMode(1)">🎙️ Dịch</button>
   <button id="m2" class="m-btn" onclick="setMode(2)">💬 Giao tiếp</button>
   <button id="m3" class="m-btn" onclick="setMode(3)">🗣️ Luyện nói</button>
+</div>
+<div class="voice-bar" aria-label="Cài đặt giọng đọc">
+  <label for="voiceSelect">🎙️ Giọng đọc:</label>
+  <select id="voiceSelect" onchange="saveVoiceChoice()" aria-label="Chọn một trong năm giọng đọc tiếng Anh">
+    <option value="google">Google US English</option>
+    <option value="teacher">Cô giáo tiếng Anh</option>
+    <option value="warm">Nữ Mỹ trầm ấm, trưởng thành</option>
+    <option value="sweet">Nữ Mỹ nhẹ nhàng, ngọt ngào</option>
+    <option value="male">Giọng nam Mỹ</option>
+  </select>
+  <button type="button" onclick="previewVoice()">▶ Nghe thử</button>
 </div>
 <!-- CHẾ ĐỘ 1: DỊCH 2 CHIỀU & BÁO GIÁ NHANH -->
 <div id="v1" class="view on">
@@ -300,7 +317,49 @@ function saveM(){
   document.getElementById('md').style.display='none';
   alert("Đã lưu Key sạch sẽ!");
 }
-function spk(x,l){window.speechSynthesis.cancel();var u=new SpeechSynthesisUtterance(x);u.lang=l;u.rate=.95;window.speechSynthesis.speak(u)}
+// Chỉ hiển thị 5 lựa chọn giọng. Tên voice thực tế phụ thuộc thiết bị/trình duyệt.
+var nailVoices=[];
+var nailVoiceProfiles={
+  google:{patterns:[/google us english/i,/google.*(en-us|english.*us)/i],fallback:[/en-us/i]},
+  teacher:{patterns:[/jenny/i,/aria/i,/samantha/i,/zira/i,/susan/i,/female|woman/i],fallback:[/en-us/i]},
+  warm:{patterns:[/samantha/i,/susan/i,/zira/i,/aria/i,/female|woman/i],fallback:[/en-us/i]},
+  sweet:{patterns:[/ava/i,/jenny/i,/aria/i,/samantha/i,/female|woman/i],fallback:[/en-us/i]},
+  male:{patterns:[/guy/i,/david/i,/mark/i,/alex/i,/daniel/i,/male|man/i],fallback:[/en-us/i]}
+};
+function loadNailVoices(){
+  if(!('speechSynthesis' in window)) return;
+  nailVoices=window.speechSynthesis.getVoices().filter(function(v){return /^en-US/i.test(v.lang)});
+  var sel=document.getElementById('voiceSelect'); if(!sel) return;
+  var saved=localStorage.getItem('nailVoiceChoice')||'warm';
+  // Tương thích lựa chọn cũ đã lưu bằng voiceURI.
+  if(!['google','teacher','warm','sweet','male'].includes(saved)) saved='warm';
+  sel.value=saved;
+}
+function saveVoiceChoice(){var el=document.getElementById('voiceSelect');if(el)localStorage.setItem('nailVoiceChoice',el.value)}
+function chosenNailVoice(){
+  var sel=document.getElementById('voiceSelect'),key=sel?sel.value:'warm';
+  var profile=nailVoiceProfiles[key]||nailVoiceProfiles.warm;
+  for(var i=0;i<profile.patterns.length;i++){
+    var hit=nailVoices.find(function(v){return profile.patterns[i].test(v.name)});
+    if(hit)return hit;
+  }
+  // Nếu thiết bị không có đúng voice mong muốn, chọn voice en-US gần nhất hiện có.
+  if(key==='male'){
+    var anyMale=nailVoices.find(function(v){return /male|man|guy|david|mark/i.test(v.name)});
+    if(anyMale)return anyMale;
+  }
+  return nailVoices[0]||null;
+}
+function speakNailEnglish(text,rate){
+  if(!('speechSynthesis' in window)) return alert('Trình duyệt này chưa hỗ trợ đọc tiếng Anh.');
+  window.speechSynthesis.cancel();
+  var u=new SpeechSynthesisUtterance(text);u.lang='en-US';u.rate=rate||0.90;u.pitch=(document.getElementById('voiceSelect')&&document.getElementById('voiceSelect').value==='male')?0.88:0.96;
+  var voice=chosenNailVoice();if(voice)u.voice=voice;
+  window.speechSynthesis.speak(u);
+}
+function spk(x,l){if(/^en/i.test(l)){speakNailEnglish(x,0.90);return}window.speechSynthesis.cancel();var u=new SpeechSynthesisUtterance(x);u.lang=l;u.rate=.95;window.speechSynthesis.speak(u)}
+function previewVoice(){speakNailEnglish('Welcome to our salon. How are you doing today? Would you like acrylic or dip powder?',0.90)}
+if('speechSynthesis' in window){loadNailVoices();window.speechSynthesis.onvoiceschanged=loadNailVoices;}
 function reSpk(){if(lt)spk(lt,ll)}
 function say(e, v, el){
   document.getElementById('o').innerText = v;
@@ -517,9 +576,7 @@ function move(s){
   playV(0.95);
 }
 function playV(r){
-  window.speechSynthesis.cancel();
-  var u=new SpeechSynthesisUtterance(data[cat][idx].en);
-  u.lang='en-US';u.rate=r;window.speechSynthesis.speak(u);
+  speakNailEnglish(data[cat][idx].en,Math.min(r||0.90,0.92));
 }
 function chkSpk(){
   if(!rc)return alert("Mở bằng Safari trên iPhone!");
