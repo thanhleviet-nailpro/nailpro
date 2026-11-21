@@ -430,64 +430,119 @@ function quotePrice(amount, el){
   var vi = "Tổng của bạn hôm nay là $" + amount + ". Bạn thanh toán tiền mặt hay thẻ?";
   say(en, vi, el);
 }
-function mic(l){
-  var SR = window.SpeechRecognition || window.webkitSpeechRecognition;
-  if(!SR) return alert("Trình duyệt này chưa hỗ trợ nhận diện giọng nói. Bạn có thể dùng phần nghe câu mẫu, hoặc thử Chrome trên máy tính hay Safari trên iPhone.");
-  var k = (localStorage.getItem('gk')||'').replace(/\s+/g, '');
-  if(!k) return openM();
+// Dịch trực tiếp: giữ micro mở, hiện chữ đang nhận diện và chỉ dịch khi có khoảng nghỉ.
+var liveRecognition=null, liveLang='', liveActive=false, liveFinalText='', livePauseTimer=null, liveRestartTimer=null, liveRequestId=0, liveAbort=null;
+function setMicButtons(activeLang){
+  var be=document.getElementById('bE'), bv=document.getElementById('bV');
+  [be,bv].forEach(function(b){b.classList.remove('rec')});
+  if(activeLang){
+    var b=activeLang==='en-US'?be:bv;
+    b.classList.add('rec');
+    b.innerText=activeLang==='en-US'?'⏹ Dừng khách nói':'⏹ Dừng thợ nói';
+  } else {
+    be.innerText='🇺🇸 Khách nói (EN)';
+    bv.innerText='🇻🇳 Thợ nói (VI)';
+  }
+}
+function stopLiveMic(message){
+  liveActive=false;
+  if(livePauseTimer) clearTimeout(livePauseTimer);
+  if(liveRestartTimer) clearTimeout(liveRestartTimer);
+  livePauseTimer=liveRestartTimer=null;
+  if(liveRecognition){try{liveRecognition.onend=null;liveRecognition.stop()}catch(e){} liveRecognition=null;}
+  setMicButtons('');
+  if(message) document.getElementById('o').innerText=message;
+}
+function translateLiveText(textToTranslate, lang){
+  var k=(localStorage.getItem('gk')||'').replace(/\s+/g,'');
+  if(!textToTranslate.trim() || !k) return;
+  var requestId=++liveRequestId;
+  if(liveAbort){try{liveAbort.abort()}catch(e){}}
+  liveAbort=new AbortController();
+  var target=lang==='en-US'?'Tiếng Việt':'tiếng Anh Mỹ dùng trong tiệm nail';
+  var prompt='Bạn là phiên dịch viên hội thoại trong tiệm nail tại Mỹ. Hãy dịch tự nhiên, ngắn gọn và đúng ngữ cảnh. Giữ nguyên ý, giá tiền, tên dịch vụ và thuật ngữ nail cần thiết. Chỉ trả về bản dịch, không giải thích. Dịch sang '+target+': '+textToTranslate;
+  document.getElementById('t').innerText='Đang dịch...';
+  var domain=['generativelanguage','googleapis','com'].join('.');
+  var apiUrl='https://'+domain+'/v1beta/models/gemini-3.5-flash-lite:generateContent?key='+k;
+  var timedOut=false;
+  var timeout=setTimeout(function(){timedOut=true;if(liveAbort)liveAbort.abort()},18000);
+  fetch(apiUrl,{
+    method:'POST',headers:{'Content-Type':'application/json'},signal:liveAbort.signal,
+    body:JSON.stringify({contents:[{parts:[{text:prompt}]}],generationConfig:{temperature:0.2,maxOutputTokens:180}})
+  }).then(async function(r){
+    var d=await r.json();
+    if(!r.ok || d.error){var msg=d.error&&d.error.message?d.error.message:'Mã lỗi '+r.status;throw new Error(msg)}
+    var ans=d&&d.candidates&&d.candidates[0]&&d.candidates[0].content&&d.candidates[0].content.parts&&d.candidates[0].content.parts[0]&&d.candidates[0].content.parts[0].text;
+    if(!ans) throw new Error('Chưa nhận được bản dịch. Bạn thử nói lại nhé.');
+    if(requestId!==liveRequestId)return;
+    ans=ans.trim();
+    document.getElementById('t').innerText=ans;
+    lt=ans;ll=lang==='en-US'?'vi-VN':'en-US';
+    // Chỉ tự đọc bản dịch tiếng Anh khi thợ nói tiếng Việt.
+    if(lang==='vi-VN')spk(ans,'en-US');
+  }).catch(function(err){
+    if(requestId!==liveRequestId)return;
+    if(err.name==='AbortError'&&!timedOut)return;
+    document.getElementById('t').innerText=timedOut?'Mạng phản hồi quá chậm. Bạn hãy thử lại.':'Chưa dịch được: '+err.message+' Bạn có thể bấm micro và nói lại.';
+  }).finally(function(){clearTimeout(timeout)});
+}
+function scheduleLiveTranslation(lang){
+  if(livePauseTimer)clearTimeout(livePauseTimer);
+  livePauseTimer=setTimeout(function(){
+    var phrase=liveFinalText.trim();
+    liveFinalText='';
+    if(phrase)translateLiveText(phrase,lang);
+    if(liveActive)document.getElementById('o').innerText='Đang nghe... Bạn có thể nói câu tiếp theo.';
+  },700);
+}
+function startLiveRecognition(lang){
+  if(!liveActive)return;
+  var SR=window.SpeechRecognition||window.webkitSpeechRecognition;
+  var rec=new SR();liveRecognition=rec;rec.lang=lang;rec.continuous=true;rec.interimResults=true;rec.maxAlternatives=1;
+  rec.onresult=function(e){
+    var interim='';
+    for(var i=e.resultIndex;i<e.results.length;i++){
+      var piece=e.results[i][0].transcript||'';
+      if(e.results[i].isFinal){liveFinalText+=(liveFinalText?' ':'')+piece.trim();}
+      else interim+=piece;
+    }
+    var shown=(liveFinalText+' '+interim).trim();
+    if(shown)document.getElementById('o').innerText=shown;
+    if(liveFinalText.trim())scheduleLiveTranslation(lang);
+  };
+  rec.onerror=function(e){
+    if(!liveActive)return;
+    if(e.error==='not-allowed'||e.error==='service-not-allowed'){
+      stopLiveMic('Micro chưa được cấp quyền. Hãy cho phép trình duyệt sử dụng micro rồi thử lại.');
+    } else if(e.error==='network'){
+      document.getElementById('o').innerText='Mạng nhận diện giọng nói đang chập chờn. Đang thử kết nối lại...';
+    } else if(e.error!=='no-speech'&&e.error!=='aborted'){
+      document.getElementById('o').innerText='Micro gặp lỗi: '+e.error+'. Hãy thử bấm lại.';
+    }
+  };
+  rec.onend=function(){
+    if(liveRecognition===rec)liveRecognition=null;
+    if(liveActive){
+      liveRestartTimer=setTimeout(function(){if(liveActive)startLiveRecognition(lang)},300);
+    }
+  };
+  try{rec.start()}catch(e){
+    if(liveActive){liveRestartTimer=setTimeout(function(){if(liveActive)startLiveRecognition(lang)},500)}
+  }
+}
+function mic(lang){
+  var SR=window.SpeechRecognition||window.webkitSpeechRecognition;
+  if(!SR)return alert('Trình duyệt này chưa hỗ trợ nhận diện giọng nói. Bạn hãy thử Google Chrome trên máy tính hoặc trình duyệt hỗ trợ micro.');
+  var key=(localStorage.getItem('gk')||'').replace(/\s+/g,'');
+  if(!key)return openM();
+  if(liveActive && liveLang===lang){stopLiveMic('Đã dừng nghe.');return;}
+  if(liveActive)stopLiveMic();
   window.speechSynthesis.cancel();
-  document.getElementById('bE').classList.remove('rec');
-  document.getElementById('bV').classList.remove('rec');
-  document.getElementById(l=='en-US'?'bE':'bV').classList.add('rec');
-  document.getElementById('o').innerText = "Đang nghe... Hãy nói ngay!";
-  document.getElementById('t').innerText = "...";
-  var newRec = new SR();
-  newRec.lang = l;
-  newRec.continuous = false;
-  newRec.interimResults = false;
-  newRec.onresult = async function(e){
-    var tx = e.results.item(0).item(0).transcript;
-    document.getElementById('o').innerText = tx;
-    document.getElementById('bE').classList.remove('rec');
-    document.getElementById('bV').classList.remove('rec');
-    var p = "Dịch sang " + (l=='en-US'?'Tiếng Việt':'Tiếng Anh Mỹ tiệm nail') + " (chỉ trả về câu dịch): " + tx;
-    var domain = ["generativelanguage", "googleapis", "com"].join(".");
-    var apiUrl = "https://" + domain + "/v1beta/models/gemini-3.5-flash-lite:generateContent?key=" + k;
-    try {
-      var r = await fetch(apiUrl, {
-        method: "POST",
-        headers: {"Content-Type": "application/json"},
-        body: JSON.stringify({contents:[{parts:[{text:p}]}]})
-      });
-      var d = await r.json();
-      if(!r.ok || d.error){
-        var msg = (d.error && d.error.message) ? d.error.message : ("Mã lỗi " + r.status);
-        document.getElementById('t').innerText = "Lỗi Google: " + msg;
-        return;
-      }
-      var ans = d.candidates.shift().content.parts.shift().text.trim();
-      document.getElementById('t').innerText = ans;
-      lt = ans;
-      ll = l=='en-US'?'vi-VN':'en-US';
-      if(l=='vi-VN') spk(ans, 'en-US');
-    } catch(x) {
-      document.getElementById('t').innerText = "Lỗi mạng: " + x.message;
-    }
-  };
-  newRec.onerror = function(e){
-    document.getElementById('bE').classList.remove('rec');
-    document.getElementById('bV').classList.remove('rec');
-    if(e.error === 'aborted') {
-      document.getElementById('o').innerText = "Lỗi ngắt mic: Hãy vào Cài đặt iPhone -> Bàn phím -> Bật Đọc chính tả!";
-    } else {
-      document.getElementById('o').innerText = "Lỗi mic: " + e.error;
-    }
-  };
-  newRec.onend = function(){
-    document.getElementById('bE').classList.remove('rec');
-    document.getElementById('bV').classList.remove('rec');
-  };
-  newRec.start();
+  liveLang=lang;liveActive=true;liveFinalText='';
+  document.getElementById('o').innerText=lang==='en-US'?'Đang nghe khách nói tiếng Anh...':'Đang nghe bạn nói tiếng Việt...';
+  document.getElementById('t').innerText='Bản dịch sẽ hiện ở đây sau khi bạn ngừng nói.';
+  setMicButtons(lang);
+  startLiveRecognition(lang);
 }
 var data=[
   [
