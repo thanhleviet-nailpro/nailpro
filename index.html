@@ -124,6 +124,41 @@ html, body {
 .voice-bar select{min-width:0;flex:1;background:#27272a;color:#fff;border:1px solid #52525b;border-radius:8px;padding:7px 6px;font-size:12px}
 .voice-bar button{background:#3a3a40;color:#fff;border:1px solid #666;border-radius:8px;padding:7px 9px;font-size:12px;font-weight:700;white-space:nowrap}
 
+
+/* Nâng cấp trải nghiệm cho người mới bắt đầu và người cần chữ dễ đọc */
+html, body { font-size:16px; }
+#v3 { order:1; }
+#v1 { order:2; }
+#v2 { order:3; }
+.topic-picker { flex-shrink:0; margin-bottom:9px; }
+.topic-picker label { display:block; font-size:13px; font-weight:800; color:#fbbf24; margin:0 0 5px 2px; }
+.topic-picker select {
+  width:100%; background:#27272a; color:#fff; border:2px solid #71717a;
+  border-radius:11px; padding:12px 11px; font-size:16px; font-weight:700;
+}
+#v3 .card { padding:15px; gap:10px; }
+#v3 .vi-m { font-size:19px; line-height:1.4; }
+#v3 .en-t { font-size:27px !important; line-height:1.35; }
+#v3 .phon { font-size:19px !important; line-height:1.45; }
+#v3 .b-mic { min-height:58px; font-size:18px; }
+#v3 .b-aud { min-height:54px; font-size:16px; }
+#v3 .b-nav { min-height:54px; font-size:16px; }
+#v3 .nav { padding-top:8px; }
+#v2 .chip { font-size:15px; line-height:1.4; padding:12px; }
+#v1 .chip { font-size:15px; line-height:1.35; }
+.m-btn { min-height:44px; font-size:14px !important; }
+.voice-bar { min-height:44px; font-size:13px; }
+.voice-bar select, .voice-bar button { min-height:38px; font-size:13px; }
+@media (max-height:760px) {
+  #v3 .card { padding:11px; }
+  #v3 .en-t { font-size:23px !important; margin:7px 0 !important; }
+  #v3 .phon { font-size:16px !important; padding:9px !important; }
+  #v3 .b-mic, #v3 .b-aud, #v3 .b-nav { min-height:46px; padding:10px; }
+}
+@media (max-width:380px) {
+  .m-btn { font-size:12px !important; }
+}
+
 </style>
 </head>
 <body>
@@ -135,9 +170,9 @@ html, body {
   <button onclick="openM()" style="background:#333;color:#fff;border:none;padding:3px 8px;border-radius:6px;font-size:12px">⚙️ API Key</button>
 </div>
 <div class="mode-bar">
-  <button id="m1" class="m-btn on" onclick="setMode(1)">🎙️ Dịch</button>
-  <button id="m2" class="m-btn" onclick="setMode(2)">💬 Giao tiếp</button>
-  <button id="m3" class="m-btn" onclick="setMode(3)">🗣️ Luyện nói</button>
+  <button id="m1" class="m-btn on" onclick="setMode(1)">📘 Học từng câu</button>
+  <button id="m2" class="m-btn" onclick="setMode(2)">🎙️ Dịch nhanh</button>
+  <button id="m3" class="m-btn" onclick="setMode(3)">💬 Giao tiếp</button>
 </div>
 <div class="voice-bar" aria-label="Cài đặt giọng đọc">
   <label for="voiceSelect">🎙️ Giọng đọc:</label>
@@ -151,7 +186,7 @@ html, body {
   <button type="button" onclick="previewVoice()">▶ Nghe thử</button>
 </div>
 <!-- CHẾ ĐỘ 1: DỊCH 2 CHIỀU & BÁO GIÁ NHANH -->
-<div id="v1" class="view on">
+<div id="v1" class="view">
   <div class="box">
     <div><small style="color:#888">NỘI DUNG GỐC:</small><div id="o" class="orig">Bấm Micro hoặc chọn câu mẫu...</div></div>
     <div><small style="color:#888">BẢN DỊCH / TIẾNG ANH:</small><div id="t" class="trans">...</div></div>
@@ -241,10 +276,10 @@ html, body {
     </div>
   </div>
   <div class="tabs">
-    <button class="tab on" onclick="tab2(1,this)">1. Pedicure</button>
-    <button class="tab" onclick="tab2(2,this)">2. Gel Change</button>
-    <button class="tab" onclick="tab2(3,this)">3. Manicure</button>
-    <button class="tab" onclick="tab2(4,this)">4. Dip Powder</button>
+    <button class="tab on" onclick="tab2(1,this)">1. Móng chân</button>
+    <button class="tab" onclick="tab2(2,this)">2. Thay sơn gel</button>
+    <button class="tab" onclick="tab2(3,this)">3. Móng tay</button>
+    <button class="tab" onclick="tab2(4,this)">4. Bột nhúng</button>
   </div>
   <div id="g1" class="list on" style="flex-direction:column;flex-wrap:nowrap;gap:6px"></div>
   <div id="g2" class="list" style="flex-direction:column;flex-wrap:nowrap;gap:6px"></div>
@@ -252,22 +287,25 @@ html, body {
   <div id="g4" class="list" style="flex-direction:column;flex-wrap:nowrap;gap:6px"></div>
 </div>
 <!-- CHẾ ĐỘ 3: LUYỆN NÓI -->
-<div id="v3" class="view">
-    <div class="tabs">
-    <button class="tab on" onclick="setCat(0,this)">1. Đón khách</button>
-    <button class="tab" onclick="setCat(1,this)">2. Hỏi dịch vụ</button>
-    <button class="tab" onclick="setCat(2,this)">3. Chân & Spa</button>
-    <button class="tab" onclick="setCat(3,this)">4. Làm móng</button>
-    <button class="tab" onclick="setCat(4,this)">5. Màu & Thiết kế</button>
-    <button class="tab" onclick="setCat(5,this)">6. Điều chỉnh</button>
-    <button class="tab" onclick="setCat(6,this)">7. Gần hoàn thành</button>
-    <button class="tab" onclick="setCat(7,this)">8. Thanh toán & Tip</button>
-    <button class="tab" onclick="setCat(8,this)">9. Chăm sóc & Hẹn</button>
-    <button class="tab" onclick="setCat(9,this)">10. Đông khách</button>
-    <button class="tab" onclick="setCat(10,this)">11. Xã giao</button>
-    <button class="tab" onclick="setCat(11,this)">12. Khách hay hỏi</button>
-    <button class="tab" onclick="setCat(12,this)">13. Phàn nàn & Xử lý</button>
-  </div>
+<div id="v3" class="view on">
+    <div class="topic-picker">
+      <label for="studyCategory">HÔM NAY BẠN MUỐN HỌC CHỦ ĐỀ NÀO?</label>
+      <select id="studyCategory" onchange="setCatFromSelect(this.value)">
+        <option value="0">1. Đón khách</option>
+        <option value="1">2. Hỏi dịch vụ</option>
+        <option value="2">3. Chân & Spa</option>
+        <option value="3">4. Làm móng</option>
+        <option value="4">5. Màu & Thiết kế</option>
+        <option value="5">6. Điều chỉnh móng</option>
+        <option value="6">7. Gần hoàn thành</option>
+        <option value="7">8. Thanh toán & Tip</option>
+        <option value="8">9. Chăm sóc & Hẹn</option>
+        <option value="9">10. Khi tiệm đông khách</option>
+        <option value="10">11. Trò chuyện xã giao</option>
+        <option value="11">12. Khách thường hỏi</option>
+        <option value="12">13. Phàn nàn & Xử lý</option>
+      </select>
+    </div>
     <div class="card" style="justify-content:space-between;gap:12px">
     <div style="flex:1;display:flex;flex-direction:column;justify-content:center">
       <div style="display:flex;justify-content:space-between;align-items:center">
@@ -275,12 +313,15 @@ html, body {
         <span id="cnt" style="font-size:13px;color:#a1a1aa;font-weight:bold">1/5</span>
       </div>
       <div id="enTxt" class="en-t" style="font-size:26px;margin:12px 0">...</div>
-      <div class="phon" style="font-size:18px;padding:12px">Mẹo đọc: <b id="phonTxt">...</b></div>
+      <div class="phon" style="font-size:18px;padding:12px">
+        <div style="font-size:13px;color:#a1a1aa;margin-bottom:5px">CÁCH ĐỌC GỢI Ý (CHỈ ĐỂ DỄ BẮT ĐẦU)</div>
+        <b id="phonTxt">...</b>
+      </div>
     </div>
 
     <div class="prac" style="margin-top:0">
       <button id="micBtn" class="b-mic" onclick="chkSpk()">🎤 Bấm để đọc thử</button>
-      <div id="resTxt" class="res-t">Bấm nút xanh và đọc to câu tiếng Anh ở trên</div>
+      <div id="resTxt" class="res-t">1. Đọc nghĩa tiếng Việt → 2. Nghe tiếng Anh → 3. Đọc theo → 4. Tự nói lại.</div>
       <div class="aud-r" style="margin-top:10px">
         <button class="b-aud" onclick="playV(0.95)">🔊 Nghe chuẩn</button>
         <button class="b-aud" onclick="playV(0.6)">🐢 Nghe chậm</button>
@@ -293,17 +334,29 @@ html, body {
   </div>
 </div>
 
-<div id="md"><div class="mb"><b>Nhập Gemini API Key</b><input type="password" id="ki" placeholder="AIzaSy..."><button onclick="saveM()" style="width:100%;padding:10px;background:#30d158;border:none;border-radius:8px;font-weight:bold">Lưu lại</button></div></div>
+<div id="md">
+  <div class="mb">
+    <b style="font-size:19px">Cài đặt dịch bằng AI</b>
+    <p style="font-size:14px;line-height:1.5;color:#d4d4d8">Chỉ cần nhập API Key khi muốn dùng micro để dịch hội thoại. Nếu bạn chỉ học câu mẫu, nghe và luyện nói thì không cần nhập.</p>
+    <label for="ki" style="font-size:13px;color:#fbbf24">Gemini API Key</label>
+    <input type="password" id="ki" placeholder="Dán API Key vào đây" autocomplete="off">
+    <button onclick="saveM()" style="width:100%;padding:13px;background:#30d158;border:none;border-radius:10px;font-weight:bold;font-size:16px">Lưu API Key</button>
+    <button onclick="closeM()" style="width:100%;padding:12px;margin-top:8px;background:#3a3a40;color:#fff;border:1px solid #666;border-radius:10px;font-weight:bold">Đóng</button>
+    <p style="font-size:12px;line-height:1.45;color:#a1a1aa;margin-bottom:0">Lưu ý: API Key được lưu trong trình duyệt trên thiết bị này. Không chia sẻ file có chứa khóa cá nhân cho người khác.</p>
+  </div>
+</div>
 
 <script>
 var lt="",ll="en-US",SR=window.SpeechRecognition||window.webkitSpeechRecognition,rc=SR?new SR():null;
 function setMode(m){
-  document.getElementById('m1').classList.toggle('on', m===1);
-  document.getElementById('m2').classList.toggle('on', m===2);
-  document.getElementById('m3').classList.toggle('on', m===3);
-  document.getElementById('v1').classList.toggle('on', m===1);
-  document.getElementById('v2').classList.toggle('on', m===2);
-  document.getElementById('v3').classList.toggle('on', m===3);
+  // 1 = Học từng câu (v3), 2 = Dịch nhanh (v1), 3 = Giao tiếp (v2)
+  var activeView = {1:'v3', 2:'v1', 3:'v2'}[m] || 'v3';
+  ['m1','m2','m3'].forEach(function(id,i){
+    document.getElementById(id).classList.toggle('on', i+1===m);
+  });
+  ['v1','v2','v3'].forEach(function(id){
+    document.getElementById(id).classList.toggle('on', id===activeView);
+  });
 }
 function tab(n,e){
   document.querySelectorAll('#v1 .list').forEach(x=>x.classList.remove('on'));
@@ -311,11 +364,12 @@ function tab(n,e){
   document.getElementById('t'+n).classList.add('on');e.classList.add('on');
 }
 function openM(){document.getElementById('ki').value=localStorage.getItem('gk')||'';document.getElementById('md').style.display='flex'}
+function closeM(){document.getElementById('md').style.display='none'}
 function saveM(){
   var cleanKey = document.getElementById('ki').value.replace(/\s+/g, '');
   localStorage.setItem('gk', cleanKey);
   document.getElementById('md').style.display='none';
-  alert("Đã lưu Key sạch sẽ!");
+  alert(cleanKey ? "Đã lưu API Key trên thiết bị này." : "Đã xóa API Key đã lưu.");
 }
 // Chỉ hiển thị 5 lựa chọn giọng. Tên voice thực tế phụ thuộc thiết bị/trình duyệt.
 var nailVoices=[];
@@ -378,7 +432,7 @@ function quotePrice(amount, el){
 }
 function mic(l){
   var SR = window.SpeechRecognition || window.webkitSpeechRecognition;
-  if(!SR) return alert("Hãy mở bằng trình duyệt Safari trên iPhone!");
+  if(!SR) return alert("Trình duyệt này chưa hỗ trợ nhận diện giọng nói. Bạn có thể dùng phần nghe câu mẫu, hoặc thử Chrome trên máy tính hay Safari trên iPhone.");
   var k = (localStorage.getItem('gk')||'').replace(/\s+/g, '');
   if(!k) return openM();
   window.speechSynthesis.cancel();
@@ -560,14 +614,17 @@ function render(){
   document.getElementById('enTxt').innerText=it.en;
   document.getElementById('phonTxt').innerText=it.ph;
   document.getElementById('cnt').innerText=(idx+1)+"/"+data[cat].length;
-  document.getElementById('resTxt').innerText="Bấm nút xanh và đọc to câu tiếng Anh ở trên";
+  document.getElementById('resTxt').innerText="Bước 1: Nghe câu mẫu. Bước 2: Đọc theo. Bước 3: Tự nói lại.";
   document.getElementById('resTxt').style.color="#ccc";
 }
-function setCat(c,el){
-  cat=c;idx=0;
-  document.querySelectorAll('#v2 .tab').forEach(t=>t.classList.remove('on'));
-  el.classList.add('on');render();
+function setCat(c){
+  cat=Math.max(0,Math.min(data.length-1,Number(c)||0));
+  idx=0;
+  var picker=document.getElementById('studyCategory');
+  if(picker) picker.value=String(cat);
+  render();
 }
+function setCatFromSelect(value){setCat(value)}
 function move(s){
   idx+=s;
   if(idx<0)idx=data[cat].length-1;
@@ -579,7 +636,7 @@ function playV(r){
   speakNailEnglish(data[cat][idx].en,Math.min(r||0.90,0.92));
 }
 function chkSpk(){
-  if(!rc)return alert("Mở bằng Safari trên iPhone!");
+  if(!rc)return alert("Trình duyệt này chưa hỗ trợ nhận diện giọng nói. Bạn vẫn có thể nghe mẫu và luyện đọc theo.");
   var b=document.getElementById('micBtn'),rs=document.getElementById('resTxt');
   b.classList.add('rec');b.innerText="👂 Đang nghe bạn đọc...";rs.innerText="Hãy đọc rõ ràng câu tiếng Anh...";
   try{rc.abort()}catch(e){}
@@ -592,12 +649,13 @@ function chkSpk(){
     var tw=tg.split(" "),m=0;
     tw.forEach(w=>{if(cs.indexOf(w)!==-1)m++});
     var sc=Math.round((m/tw.length)*100);
-    if(sc>=80){rs.style.color="#4cd964";rs.innerText="🎉 Tuyệt vời ("+sc+"%): \""+sp+"\""}
-    else if(sc>=50){rs.style.color="#ffd60a";rs.innerText="👍 Khá tốt ("+sc+"%): \""+sp+"\". Thử lại chút nữa!"}
-    else{rs.style.color="#ff453a";rs.innerText="😅 Chưa rõ ("+sc+"%): \""+sp+"\". Bấm Nghe Chậm nhé!"}
+    if(sc>=80){rs.style.color="#4cd964";rs.innerText="🎉 Hệ thống nhận ra phần lớn câu ("+sc+"%): \""+sp+"\""}
+    else if(sc>=50){rs.style.color="#ffd60a";rs.innerText="👍 Hệ thống nghe được một phần ("+sc+"%): \""+sp+"\". Bạn thử lại nhé!"}
+    else{rs.style.color="#ff453a";rs.innerText="Hệ thống chưa nghe rõ ("+sc+"%): \""+sp+"\". Hãy nghe mẫu chậm rồi thử lại."}
   };
   rc.onerror=function(){b.classList.remove('rec');b.innerText="🎤 Bấm để đọc thử";rs.innerText="Không nghe rõ, bạn hãy bấm và đọc lại nhé."};
-  rc.start();
+  rc.onend=function(){b.classList.remove('rec');if(b.innerText.indexOf("Đang nghe")!==-1)b.innerText="🎤 Bấm để đọc thử";};
+  try { rc.start(); } catch(err) { b.classList.remove('rec');b.innerText="🎤 Bấm để đọc thử";rs.innerText="Không thể bắt đầu ghi âm. Hãy kiểm tra quyền micro của trình duyệt."; }
 }
 render();
 document.querySelectorAll('.b-aud, .b-nav, .b-mic, .mic').forEach(function(btn){
